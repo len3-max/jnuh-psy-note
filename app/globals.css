@@ -52,6 +52,7 @@ button { cursor: pointer; }
 .field-grid { display: grid; gap: 26px 20px; }
 .patient-grid { grid-template-columns: 1.2fr .7fr .55fr 1fr; }
 .patient-grid .field:nth-child(5), .patient-grid .field:nth-child(6) { grid-column: span 2; }
+.patient-grid .field:nth-child(7) { grid-column: 1 / -1; }
 .field { display: grid; gap: 9px; min-width: 0; }
 .field > span { color: #394b44; font-size: 12px; font-weight: 700; }
 .field i { font-style: normal; font-weight: 600; font-size: 9px; color: var(--red); margin-left: 6px; }
@@ -65,6 +66,21 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .unit-input span { position: absolute; right: 13px; top: 14px; color: #839189; font-size: 12px; }
 .stack { display: grid; gap: 24px; }
 .mse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
+.mse-sections { display: grid; gap: 18px; }
+.mse-card { border: 1px solid var(--line); background: white; padding: 22px; }
+.mse-card-heading { display: grid; grid-template-columns: minmax(220px, .8fr) 1.2fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid #e8eeeb; margin-bottom: 16px; }
+.mse-card-heading h3 { margin: 0; font: 600 18px/1.25 Georgia, "Noto Serif KR", serif; color: var(--green); }
+.mse-card-heading span { display: block; color: #8a9891; font-size: 10px; margin-top: 5px; letter-spacing: .04em; }
+.mse-card-heading p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.mse-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
+.mse-options button { min-height: 58px; border: 1px solid #d7e0dc; background: #fbfcfb; color: var(--ink); display: grid; grid-template-columns: 22px 1fr; align-items: start; gap: 8px; padding: 10px; text-align: left; transition: .16s; }
+.mse-options button:hover { border-color: #76a08f; background: #f3f8f5; }
+.mse-options button.selected { border-color: var(--green); background: var(--mint); box-shadow: inset 3px 0 0 var(--green); }
+.mse-options button > span:last-child { display: grid; gap: 3px; }
+.mse-options b { font-size: 11px; line-height: 1.35; }
+.mse-options small { color: #788880; font-size: 9px; line-height: 1.45; }
+.check-mark { width: 18px; height: 18px; border: 1px solid #b8c7c0; background: white; color: white; display: grid; place-items: center; font-size: 10px; }
+.selected .check-mark { background: var(--green); border-color: var(--green); }
 
 .urgent .section-heading h2 { color: #88382f; }
 .risk-alert { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: #f6e9e5; border: 1px solid #ebd1ca; margin-bottom: 24px; color: #79433c; }
@@ -94,14 +110,18 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .tabs button { border: 0; border-bottom: 2px solid transparent; background: transparent; padding: 0 0 12px; color: #7d8c85; font-size: 12px; font-weight: 700; }
 .tabs button.active { color: var(--green); border-color: var(--green); }
 .panss-list { background: white; border: 1px solid var(--line); border-top: 0; }
-.panss-row { min-height: 60px; display: grid; grid-template-columns: 46px minmax(180px, 1fr) auto; align-items: center; gap: 14px; padding: 8px 14px; border-bottom: 1px solid #edf1ef; }
+.panss-row { min-height: 92px; display: grid; grid-template-columns: 46px minmax(220px, 1fr) auto; align-items: start; gap: 14px; padding: 16px 14px; border-bottom: 1px solid #edf1ef; }
 .panss-row:last-child { border: 0; }
-.panss-row b { font-size: 13px; font-weight: 600; }
+.panss-info b { font-size: 13px; font-weight: 700; }
+.panss-info p { color: #61736a; font-size: 10px; line-height: 1.55; margin: 5px 0 7px; }
+.panss-info details { font-size: 10px; color: #65776e; }
+.panss-info summary { width: max-content; color: var(--green); font-weight: 700; cursor: pointer; list-style-position: inside; }
+.panss-info details span { display: block; margin-top: 6px; padding: 8px 10px; background: var(--mint); color: #4e6258; line-height: 1.55; }
 .code { width: 34px; height: 28px; display: grid; place-items: center; border-radius: 2px; font: 700 11px Georgia, serif; }
 .code-p { background: #f4e7e3; color: #9a4439; }
 .code-n { background: #e5eef2; color: #436e87; }
 .code-g { background: #f5ecdc; color: #9a6a23; }
-.score-buttons { display: flex; gap: 4px; }
+.score-buttons { display: flex; gap: 4px; padding-top: 2px; }
 .score-buttons button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #d7dfdb; background: white; color: #718078; font-size: 11px; }
 .score-buttons button:hover { border-color: var(--green); }
 .score-buttons button.selected { background: var(--green); border-color: var(--green); color: white; }
@@ -132,7 +152,9 @@ footer span { color: #bcd1c8; font-size: 11px; }
   .section-heading { grid-template-columns: 34px 1fr; padding-top: 38px; }
   .section-body { padding-left: 0; }
   .patient-grid, .mse-grid, .risk-footer { grid-template-columns: 1fr; }
-  .patient-grid .field:nth-child(5), .patient-grid .field:nth-child(6) { grid-column: auto; }
+  .patient-grid .field:nth-child(5), .patient-grid .field:nth-child(6), .patient-grid .field:nth-child(7) { grid-column: auto; }
+  .mse-card { padding: 16px; }
+  .mse-card-heading, .mse-options { grid-template-columns: 1fr; gap: 10px; }
   .score-strip { grid-template-columns: 1fr 1fr; }
   .score-card:nth-child(2) { border-right: 0; }
   .score-card:nth-child(-n+2) { border-bottom: 1px solid var(--line); }

@@ -6,8 +6,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
   const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const imageUrl = `${protocol}://${host}/og.png`;
-  const title = "PSY·ER | 정신건강 응급평가";
+  const imageUrl = `${protocol}://${host}/og-v2.png`;
+  const title = "JNUH PSY | ER PSY Note";
   const description = "정신건강의학과 응급 환자의 병력, 정신상태검사, 위험도 및 PANSS를 구조화하여 기록하는 임상 보조 도구";
 
   return {
@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       locale: "ko_KR",
       type: "website",
-      images: [{ url: imageUrl, width: 1731, height: 909, alt: "PSY·ER 정신건강 응급평가" }],
+      images: [{ url: imageUrl, width: 1731, height: 909, alt: "JNUH PSY ER PSY Note" }],
     },
     twitter: { card: "summary_large_image", title, description, images: [imageUrl] },
   };
