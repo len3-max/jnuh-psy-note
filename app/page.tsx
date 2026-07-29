@@ -327,13 +327,6 @@ export default function Home() {
       if (!selected && !description) return undefined;
       return `- ${section.title}: ${[selected, description].filter(Boolean).join(" / ")}`;
     });
-    const panss = PANSS_ITEMS.map(
-      (item) => `${item.code} ${item.name} ${scores[item.code]}점`,
-    ).join(", ");
-    const bprs = BPRS_ITEMS.map(
-      (item) => `${item.code} ${item.name} ${bprsScores[item.code]}점`,
-    ).join(", ");
-
     const sections = [
       makeSection("환자 정보", [
         value("name") ? `이름: ${value("name")}` : undefined,
@@ -356,8 +349,8 @@ export default function Home() {
         value("riskLevel") ? `- 종합 위험도: ${value("riskLevel")}` : undefined,
         value("safetyPlan") ? `- 즉시 시행한 안전조치: ${value("safetyPlan")}` : undefined,
       ]),
-      `[PANSS]\n양성척도 ${totals.positive}/49, 음성척도 ${totals.negative}/49, 일반정신병리 ${totals.general}/112, 총점 ${totals.total}/210\n${panss}`,
-      `[BPRS]\n총점 ${bprsTotal}/126\n${bprs}`,
+      `[PANSS]\n양성척도 합 ${totals.positive}/49, 음성척도 합 ${totals.negative}/49, 일반정신병리 합 ${totals.general}/112, 총점 ${totals.total}/210`,
+      `[BPRS]\n총점 ${bprsTotal}/126`,
       makeSection("임상 평가 및 계획", [
         value("impression") ? `진단적 인상: ${value("impression")}` : undefined,
         value("medicalWorkup") ? `의학적 감별/검사: ${value("medicalWorkup")}` : undefined,
@@ -372,7 +365,7 @@ export default function Home() {
     ].filter(Boolean).join("\n");
 
     return `${header}\n\n${sections.join("\n\n")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
-  }, [bprsScores, bprsTotal, form, mseSelections, scores, totals]);
+  }, [bprsTotal, form, mseSelections, totals]);
 
   const copySummary = async () => {
     await navigator.clipboard.writeText(summaryText);
