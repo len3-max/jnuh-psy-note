@@ -409,6 +409,32 @@ export default function Home() {
         </div>
       </header>
 
+      <section className="support-banner" aria-labelledby="support-banner-title">
+        <div className="support-banner-inner">
+          <div className="support-banner-title" id="support-banner-title">
+            <span>365일 · 24시간</span>
+            <strong>상담 서비스</strong>
+          </div>
+          <div className="support-call-list">
+            <a className="support-call mental" href="tel:15770199" aria-label="정신건강위기 상담전화 1577-0199로 전화하기">
+              <span>정신건강위기상담전화</span>
+              <strong>1577-0199</strong>
+              <small>전화 연결</small>
+            </a>
+            <a className="support-call suicide" href="tel:109" aria-label="자살예방 상담전화 109로 전화하기">
+              <span>자살예방상담전화</span>
+              <strong>109</strong>
+              <small>전화 연결</small>
+            </a>
+            <a className="support-call bereaved" href="tel:01027600199" aria-label="제주 자살유족 원스톱서비스 010-2760-0199로 전화하기">
+              <span>자살유족 원스톱서비스 <em>제주</em></span>
+              <strong>010-2760-0199</strong>
+              <small>전화 연결</small>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <div className="page-shell">
         <aside className="side-nav" aria-label="평가 항목">
           <div className="eyebrow">ASSESSMENT</div>
