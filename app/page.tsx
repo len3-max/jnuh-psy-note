@@ -276,17 +276,62 @@ export default function Home() {
   }, [scores]);
 
   const summaryText = useMemo(() => {
-    const value = (key: string) => form[key]?.trim() || "미기재";
-    const sexAge = [value("sex"), form.age ? `${form.age}세` : "나이 미기재"].join(", ");
-    const mse = MSE_SECTIONS.map((section) => {
-      const selected = mseSelections[section.key]?.join(", ") || "선택 없음";
-      return `- ${section.title}: ${selected}${form[`mse_${section.key}`]?.trim() ? ` / ${form[`mse_${section.key}`].trim()}` : ""}`;
-    }).join("\n");
+    const value = (key: string) => form[key]?.trim();
+    const makeSection = (title: string, lines: Array<string | undefined>) => {
+      const visibleLines = lines.filter((line): line is string => Boolean(line));
+      return visibleLines.length ? `[${title}]\n${visibleLines.join("\n")}` : "";
+    };
+    const sexAge = [
+      value("sex"),
+      value("age") ? `${value("age")}세` : undefined,
+    ].filter(Boolean).join(", ");
+    const mseLines = MSE_SECTIONS.map((section) => {
+      const selected = mseSelections[section.key]?.join(", ");
+      const description = value(`mse_${section.key}`);
+      if (!selected && !description) return undefined;
+      return `- ${section.title}: ${[selected, description].filter(Boolean).join(" / ")}`;
+    });
     const panss = PANSS_ITEMS.map(
       (item) => `${item.code} ${item.name} ${scores[item.code]}점`,
     ).join(", ");
 
-    return `[정신건강의학과 응급 평가]\n평가일시: ${value("assessmentDate")}\n\n[환자 정보]\n이름: ${value("name")}\n성별/나이: ${sexAge}\n환자번호: ${value("patientId")}\n정보제공자/신뢰도: ${value("informant")}\n참고사항: ${value("patientNote")}\n\n[주호소]\n${value("chiefComplaint")}\n\n[현병력]\n${value("presentIllness")}\n\n[과거력]\n${value("pastHistory")}\n\n[가족력]\n${value("familyHistory")}\n\n[물질사용력]\n${value("substanceHistory")}\n\n[Mental Status Examination]\n${mse}\n\n[위험도 평가]\n- 자살사고/계획/의도: ${value("suicideRisk")}\n- 타해사고/위협: ${value("violenceRisk")}\n- 자해·타해 수단 접근성: ${value("meansAccess")}\n- 보호요인: ${value("protectiveFactors")}\n- 종합 위험도: ${value("riskLevel")}\n- 즉시 시행한 안전조치: ${value("safetyPlan")}\n\n[PANSS]\n양성척도 ${totals.positive}/49, 음성척도 ${totals.negative}/49, 일반정신병리 ${totals.general}/112, 총점 ${totals.total}/210\n${panss}\n\n[임상 평가 및 계획]\n진단적 인상: ${value("impression")}\n의학적 감별/검사: ${value("medicalWorkup")}\n치료 및 처분 계획: ${value("plan")}\n평가자: ${value("clinician")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
+    const sections = [
+      makeSection("환자 정보", [
+        value("name") ? `이름: ${value("name")}` : undefined,
+        sexAge ? `성별/나이: ${sexAge}` : undefined,
+        value("patientId") ? `환자번호: ${value("patientId")}` : undefined,
+        value("informant") ? `정보제공자/신뢰도: ${value("informant")}` : undefined,
+        value("patientNote") ? `참고사항: ${value("patientNote")}` : undefined,
+      ]),
+      value("chiefComplaint") ? `[주호소]\n${value("chiefComplaint")}` : "",
+      value("presentIllness") ? `[현병력]\n${value("presentIllness")}` : "",
+      value("pastHistory") ? `[과거력]\n${value("pastHistory")}` : "",
+      value("familyHistory") ? `[가족력]\n${value("familyHistory")}` : "",
+      value("substanceHistory") ? `[물질사용력]\n${value("substanceHistory")}` : "",
+      makeSection("Mental Status Examination", mseLines),
+      makeSection("위험도 평가", [
+        value("suicideRisk") ? `- 자살사고/계획/의도: ${value("suicideRisk")}` : undefined,
+        value("violenceRisk") ? `- 타해사고/위협: ${value("violenceRisk")}` : undefined,
+        value("meansAccess") ? `- 자해·타해 수단 접근성: ${value("meansAccess")}` : undefined,
+        value("protectiveFactors") ? `- 보호요인: ${value("protectiveFactors")}` : undefined,
+        value("riskLevel") ? `- 종합 위험도: ${value("riskLevel")}` : undefined,
+        value("safetyPlan") ? `- 즉시 시행한 안전조치: ${value("safetyPlan")}` : undefined,
+      ]),
+      `[PANSS]\n양성척도 ${totals.positive}/49, 음성척도 ${totals.negative}/49, 일반정신병리 ${totals.general}/112, 총점 ${totals.total}/210\n${panss}`,
+      makeSection("임상 평가 및 계획", [
+        value("impression") ? `진단적 인상: ${value("impression")}` : undefined,
+        value("medicalWorkup") ? `의학적 감별/검사: ${value("medicalWorkup")}` : undefined,
+        value("plan") ? `치료 및 처분 계획: ${value("plan")}` : undefined,
+        value("clinician") ? `평가자: ${value("clinician")}` : undefined,
+      ]),
+    ].filter(Boolean);
+
+    const header = [
+      "[정신건강의학과 응급 평가]",
+      value("assessmentDate") ? `평가일시: ${value("assessmentDate")}` : undefined,
+    ].filter(Boolean).join("\n");
+
+    return `${header}\n\n${sections.join("\n\n")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
   }, [form, mseSelections, scores, totals]);
 
   const copySummary = async () => {
