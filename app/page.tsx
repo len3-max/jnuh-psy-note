@@ -340,6 +340,22 @@ export default function Home() {
     window.setTimeout(() => setCopied(false), 2200);
   };
 
+  const resetAssessment = () => {
+    const confirmed = window.confirm(
+      "입력한 환자정보, 병력, MSE, 위험도 및 PANSS 점수를 모두 초기화할까요?",
+    );
+    if (!confirmed) return;
+
+    setForm({});
+    setMseSelections({});
+    setScores(Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])));
+    setActiveGroup("P");
+    setCopied(false);
+    window.requestAnimationFrame(() =>
+      window.scrollTo({ top: 0, behavior: "smooth" }),
+    );
+  };
+
   const jumpTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -353,7 +369,10 @@ export default function Home() {
             <span>정신건강 응급평가</span>
           </div>
         </div>
-        <div className="privacy"><span /> 입력 내용은 서버에 저장되지 않습니다</div>
+        <div className="top-actions">
+          <div className="privacy"><span /> 입력 내용은 서버에 저장되지 않습니다</div>
+          <button type="button" className="reset-button compact" onClick={resetAssessment}>내용 초기화</button>
+        </div>
       </header>
 
       <div className="page-shell">
@@ -530,6 +549,10 @@ export default function Home() {
               <pre>{summaryText}</pre>
             </div>
           </Section>
+          <div className="bottom-reset">
+            <div><b>새로운 평가를 시작하시나요?</b><span>현재 입력 내용을 모두 지우고 초기 상태로 돌아갑니다.</span></div>
+            <button type="button" className="reset-button" onClick={resetAssessment}>내용 전체 초기화</button>
+          </div>
         </div>
       </div>
       <footer><b>JNUH PSY</b><span>의료진용 임상 기록 보조 도구 · 환자 안전과 기관 지침을 우선하세요.</span></footer>

@@ -23,8 +23,12 @@ button { cursor: pointer; }
 .brand div { display: grid; gap: 1px; }
 .brand strong { font-size: 16px; letter-spacing: .08em; }
 .brand div span { font-size: 11px; color: var(--muted); }
+.top-actions { display: flex; align-items: center; gap: 18px; }
 .privacy { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
 .privacy > span { width: 7px; height: 7px; border-radius: 50%; background: #4b9b74; box-shadow: 0 0 0 4px #dfeee6; }
+.reset-button { min-height: 44px; padding: 0 18px; border: 1px solid #bd6c61; background: transparent; color: #93453a; font-size: 12px; font-weight: 700; transition: .18s; }
+.reset-button:hover { background: #a64539; border-color: #a64539; color: white; }
+.reset-button.compact { min-height: 36px; padding: 0 14px; font-size: 11px; }
 
 .page-shell { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 64px; padding: 56px 4vw 96px; }
 .side-nav { position: sticky; top: 120px; align-self: start; height: calc(100vh - 150px); display: flex; flex-direction: column; }
@@ -134,6 +138,10 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .summary-heading button { border: 0; background: var(--green); color: white; padding: 12px 18px; min-width: 132px; font-size: 12px; font-weight: 700; }
 .summary-heading button:hover { background: #0e3d31; }
 .summary-preview pre { white-space: pre-wrap; word-break: keep-all; max-height: 520px; overflow: auto; margin: 0; padding: 22px; color: #40524a; font: 12px/1.75 "SFMono-Regular", Consolas, monospace; }
+.bottom-reset { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0 0 72px; }
+.bottom-reset > div { display: grid; gap: 5px; }
+.bottom-reset b { font-size: 13px; }
+.bottom-reset span { color: var(--muted); font-size: 10px; }
 footer { min-height: 96px; background: var(--green); color: white; padding: 0 4vw; display: flex; align-items: center; gap: 24px; }
 footer b { letter-spacing: .1em; }
 footer span { color: #bcd1c8; font-size: 11px; }
@@ -146,6 +154,8 @@ footer span { color: #bcd1c8; font-size: 11px; }
 @media (max-width: 760px) {
   .topbar { height: 64px; }
   .privacy { font-size: 0; }
+  .top-actions { gap: 10px; }
+  .reset-button.compact { padding: 0 10px; }
   .page-shell { padding: 30px 20px 70px; }
   .hero { grid-template-columns: 1fr; min-height: 330px; gap: 24px; align-content: center; }
   .hero h2 { font-size: 43px; }
@@ -164,5 +174,7 @@ footer span { color: #bcd1c8; font-size: 11px; }
   .tabs { gap: 16px; overflow-x: auto; }
   .tabs button { white-space: nowrap; }
   .summary-heading { align-items: flex-end; }
+  .bottom-reset { padding-left: 0; align-items: stretch; flex-direction: column; }
+  .bottom-reset .reset-button { width: 100%; }
   footer { align-items: flex-start; flex-direction: column; justify-content: center; gap: 6px; }
 }
