@@ -108,6 +108,8 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .score-card.dark { background: var(--green); }
 .score-card.dark span, .score-card.dark small { color: #b9d1c7; }
 .score-card.dark strong { color: white; }
+.bprs-score-strip { grid-template-columns: minmax(220px, 1fr); }
+.bprs-score-strip .score-card { border-right: 0; }
 .panss-scale { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; padding: 12px 14px; background: var(--mint); color: #4d655b; font-size: 13px; }
 .panss-scale b { color: var(--green); margin-right: 4px; }
 .tabs { display: flex; gap: 28px; border-bottom: 1px solid var(--line); margin-top: 28px; }
@@ -125,6 +127,10 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .code-p { background: #f4e7e3; color: #9a4439; }
 .code-n { background: #e5eef2; color: #436e87; }
 .code-g { background: #f5ecdc; color: #9a6a23; }
+.code-b { background: #ece8f5; color: #64518d; }
+.bprs-list { border-top: 1px solid var(--line); margin-top: 20px; }
+.item-title-line { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.item-title-line small { padding: 3px 7px; border-radius: 999px; background: #eef2f0; color: #65766f; font-size: 11px; font-weight: 700; }
 .score-buttons { display: flex; gap: 4px; padding-top: 2px; }
 .score-buttons button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #d7dfdb; background: white; color: #61726a; font-size: 13px; }
 .score-buttons button:hover { border-color: var(--green); }

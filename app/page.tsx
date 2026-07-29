@@ -10,6 +10,12 @@ type PanssItem = {
   definition: string;
   example: string;
 };
+type BprsItem = {
+  code: string;
+  name: string;
+  source: "언어적 보고" | "행동 관찰";
+  definition: string;
+};
 type MseOption = { label: string; definition: string };
 type MseSection = {
   key: string;
@@ -50,6 +56,27 @@ const PANSS_ITEMS: PanssItem[] = [
   { code: "G14", name: "충동조절 저하", group: "G", definition: "욕구나 감정을 숙고 없이 행동으로 옮기며 통제가 어려운 상태.", example: "사소한 자극에 갑자기 물건을 던지거나 자해 행동을 시도함." },
   { code: "G15", name: "몰두", group: "G", definition: "내적 생각과 감정에 지나치게 빠져 외부 환경과의 접촉이 감소한 상태.", example: "면담 중 내부 생각에 잠겨 질문을 놓치고 주변 상황에 거의 반응하지 않음." },
   { code: "G16", name: "능동적 사회적 회피", group: "G", definition: "두려움·불신·적대감 때문에 의도적으로 사람과 상황을 피하는 상태.", example: "해를 입을까 두려워 가족과 의료진을 피하고 문을 잠근 채 나오지 않음." },
+];
+
+const BPRS_ITEMS: BprsItem[] = [
+  { code: "B1", name: "신체적 염려", source: "언어적 보고", definition: "신체적 건강에 대한 관심의 정도, 신체적 질병에 대한 두려움, 건강염려증." },
+  { code: "B2", name: "불안", source: "언어적 보고", definition: "현재나 미래에 대한 걱정, 두려움, 지나친 근심." },
+  { code: "B3", name: "감정적 철퇴", source: "행동 관찰", definition: "자발적인 상호작용의 결여, 고립, 다른 사람과 관계를 맺는 것의 결핍." },
+  { code: "B4", name: "개념적인 와해", source: "언어적 보고", definition: "사고 과정이 혼란되어 있고, 연결이 되지 않고 와해되어 있는 정도." },
+  { code: "B5", name: "죄책감", source: "언어적 보고", definition: "자기 비난이나 수치심, 과거 행동에 대한 지나친 자책." },
+  { code: "B6", name: "긴장", source: "행동 관찰", definition: "긴장의 신체적 표현, 과잉활동성." },
+  { code: "B7", name: "반복적 행동과 자세", source: "행동 관찰", definition: "이상하고 기괴하며 자연스럽지 못한 동작과 운동 행동. 틱은 포함하지 않음." },
+  { code: "B8", name: "과대성", source: "언어적 보고", definition: "자신에 대한 과장된 생각, 오만함, 일상적이지 않은 힘과 능력에 대한 과신." },
+  { code: "B9", name: "우울한 정동", source: "언어적 보고", definition: "슬픔, 의기소침함, 낙담한 기분, 염세적 태도." },
+  { code: "B10", name: "적대감", source: "언어적 보고", definition: "타인에 대한 원한이나 경멸, 호전적 태도. 평가자에 대한 태도는 비협조성에서 평가." },
+  { code: "B11", name: "의심", source: "언어적 보고", definition: "불신, 다른 사람이 환자에게 악의나 차별적 의도를 가지고 있다는 믿음." },
+  { code: "B12", name: "환각 행동", source: "언어적 보고", definition: "외부 자극이 없는데도 스스로 느끼는 지각." },
+  { code: "B13", name: "운동 지체", source: "행동 관찰", definition: "느린 움직임이나 말에서 시사되는 에너지 수준의 감소." },
+  { code: "B14", name: "비협조성", source: "행동 관찰", definition: "저항, 방어적 태도, 권위에 대한 부인." },
+  { code: "B15", name: "이상한 사고 내용", source: "언어적 보고", definition: "일상적이지 않으며 기괴한 사고 내용." },
+  { code: "B16", name: "둔마된 정동", source: "행동 관찰", definition: "감소된 정서적 어조와 정상적인 감정 강도의 감소." },
+  { code: "B17", name: "흥분성", source: "행동 관찰", definition: "고조된 감정의 반응성, 초조, 과잉 행동." },
+  { code: "B18", name: "지남력 장애", source: "언어적 보고", definition: "시간, 장소, 사람에 대한 적절한 연상의 장애." },
 ];
 
 const MSE_SECTIONS: MseSection[] = [
@@ -237,6 +264,7 @@ const sections = [
   ["mse", "정신상태검사"],
   ["risk", "위험도"],
   ["panss", "PANSS"],
+  ["bprs", "BPRS"],
   ["summary", "평가 요약"],
 ] as const;
 
@@ -244,6 +272,9 @@ export default function Home() {
   const [form, setForm] = useState<FormState>({});
   const [scores, setScores] = useState<Record<string, number>>(
     Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])),
+  );
+  const [bprsScores, setBprsScores] = useState<Record<string, number>>(
+    Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])),
   );
   const [mseSelections, setMseSelections] = useState<Record<string, string[]>>({});
   const [activeGroup, setActiveGroup] = useState<"P" | "N" | "G">("P");
@@ -275,6 +306,11 @@ export default function Home() {
     return { positive, negative, general, total: positive + negative + general };
   }, [scores]);
 
+  const bprsTotal = useMemo(
+    () => BPRS_ITEMS.reduce((total, item) => total + bprsScores[item.code], 0),
+    [bprsScores],
+  );
+
   const summaryText = useMemo(() => {
     const value = (key: string) => form[key]?.trim();
     const makeSection = (title: string, lines: Array<string | undefined>) => {
@@ -293,6 +329,9 @@ export default function Home() {
     });
     const panss = PANSS_ITEMS.map(
       (item) => `${item.code} ${item.name} ${scores[item.code]}점`,
+    ).join(", ");
+    const bprs = BPRS_ITEMS.map(
+      (item) => `${item.code} ${item.name} ${bprsScores[item.code]}점`,
     ).join(", ");
 
     const sections = [
@@ -318,6 +357,7 @@ export default function Home() {
         value("safetyPlan") ? `- 즉시 시행한 안전조치: ${value("safetyPlan")}` : undefined,
       ]),
       `[PANSS]\n양성척도 ${totals.positive}/49, 음성척도 ${totals.negative}/49, 일반정신병리 ${totals.general}/112, 총점 ${totals.total}/210\n${panss}`,
+      `[BPRS]\n총점 ${bprsTotal}/126\n${bprs}`,
       makeSection("임상 평가 및 계획", [
         value("impression") ? `진단적 인상: ${value("impression")}` : undefined,
         value("medicalWorkup") ? `의학적 감별/검사: ${value("medicalWorkup")}` : undefined,
@@ -332,7 +372,7 @@ export default function Home() {
     ].filter(Boolean).join("\n");
 
     return `${header}\n\n${sections.join("\n\n")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
-  }, [form, mseSelections, scores, totals]);
+  }, [bprsScores, bprsTotal, form, mseSelections, scores, totals]);
 
   const copySummary = async () => {
     await navigator.clipboard.writeText(summaryText);
@@ -342,13 +382,14 @@ export default function Home() {
 
   const resetAssessment = () => {
     const confirmed = window.confirm(
-      "입력한 환자정보, 병력, MSE, 위험도 및 PANSS 점수를 모두 초기화할까요?",
+      "입력한 환자정보, 병력, MSE, 위험도, PANSS 및 BPRS 점수를 모두 초기화할까요?",
     );
     if (!confirmed) return;
 
     setForm({});
     setMseSelections({});
     setScores(Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])));
+    setBprsScores(Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])));
     setActiveGroup("P");
     setCopied(false);
     window.requestAnimationFrame(() =>
@@ -399,7 +440,7 @@ export default function Home() {
               <div className="eyebrow">EMERGENCY PSYCHIATRY</div>
               <h2>ER PSY Note</h2>
             </div>
-            <p>필수 임상정보와 정신상태검사, PANSS를 구조화해 기록한 뒤 진료기록용 텍스트로 복사할 수 있습니다.</p>
+            <p>필수 임상정보와 정신상태검사, PANSS·BPRS를 구조화해 기록한 뒤 진료기록용 텍스트로 복사할 수 있습니다.</p>
           </section>
 
           <Section id="patient" number="01" title="환자 정보" description="환자 식별 정보와 평가 시점을 기록합니다.">
@@ -537,7 +578,46 @@ export default function Home() {
             <p className="scale-note">PANSS는 교육받은 평가자가 공식 매뉴얼의 기준점(anchor point)에 따라 시행해야 합니다. 점수만으로 진단이나 처분을 결정하지 마세요.</p>
           </Section>
 
-          <Section id="summary" number="06" title="임상 평가 및 요약" description="진단적 인상과 계획을 입력한 뒤 전체 기록을 복사합니다.">
+          <Section id="bprs" number="06" title="BPRS" description="간편 정신과적 평가 척도의 18개 증상을 언어적 보고와 행동 관찰을 바탕으로 1–7점 평가합니다.">
+            <div className="score-strip bprs-score-strip">
+              <Score label="BPRS 총점" value={bprsTotal} max={126} tone="dark" />
+            </div>
+            <div className="panss-scale">
+              <b>채점 기준</b>
+              <span>1 없음</span><span>2 매우 경함</span><span>3 경함</span>
+              <span>4 중등도</span><span>5 약간 심함</span><span>6 심함</span><span>7 매우 심함</span>
+            </div>
+            <div className="panss-list bprs-list">
+              {BPRS_ITEMS.map((item) => (
+                <div className="panss-row" key={item.code}>
+                  <span className="code code-b">{item.code}</span>
+                  <div className="panss-info">
+                    <div className="item-title-line">
+                      <b>{item.name}</b>
+                      <small>{item.source}</small>
+                    </div>
+                    <p>{item.definition}</p>
+                  </div>
+                  <div className="score-buttons" aria-label={`${item.code} ${item.name} 점수`}>
+                    {[1, 2, 3, 4, 5, 6, 7].map((score) => (
+                      <button
+                        type="button"
+                        key={score}
+                        className={bprsScores[item.code] === score ? "selected" : ""}
+                        aria-pressed={bprsScores[item.code] === score}
+                        onClick={() => setBprsScores((current) => ({ ...current, [item.code]: score }))}
+                      >
+                        {score}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="scale-note">BPRS는 면담에서 확인한 환자의 보고와 평가자가 관찰한 행동을 구분해 채점합니다. 척도 점수만으로 진단이나 처분을 결정하지 마세요.</p>
+          </Section>
+
+          <Section id="summary" number="07" title="임상 평가 및 요약" description="진단적 인상과 계획을 입력한 뒤 전체 기록을 복사합니다.">
             <div className="stack">
               <Field label="진단적 인상"><textarea rows={3} value={form.impression || ""} onChange={(e) => setField("impression", e.target.value)} placeholder="주요 진단 및 감별진단, 근거" /></Field>
               <Field label="의학적 감별 / 검사"><textarea rows={3} value={form.medicalWorkup || ""} onChange={(e) => setField("medicalWorkup", e.target.value)} placeholder="섬망·물질·신경학적/내과적 원인 평가, 검사 결과" /></Field>
