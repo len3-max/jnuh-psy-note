@@ -1,29 +1,44 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "./globals.css";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const imageUrl = `${protocol}://${host}/og-v2.png`;
-  const title = "JNUH PSY | ER PSY Note";
-  const description = "정신건강의학과 응급 환자의 병력, 정신상태검사, 위험도 및 PANSS를 구조화하여 기록하는 임상 보조 도구";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  "https://psy-er-assessment.exact-cloud-8851.chatgpt.site";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const imageUrl = `${siteUrl}/og-v2.png`;
+const title = "JNUH PSY | ER PSY Note";
+const description =
+  "정신건강의학과 응급 환자의 병력, 정신상태검사, 위험도 및 PANSS를 구조화하여 기록하는 임상 보조 도구";
 
-  return {
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  icons: {
+    icon: `${basePath}/favicon.svg`,
+    shortcut: `${basePath}/favicon.svg`,
+  },
+  openGraph: {
     title,
     description,
-    icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
-    openGraph: {
-      title,
-      description,
-      locale: "ko_KR",
-      type: "website",
-      images: [{ url: imageUrl, width: 1731, height: 909, alt: "JNUH PSY ER PSY Note" }],
-    },
-    twitter: { card: "summary_large_image", title, description, images: [imageUrl] },
-  };
-}
+    locale: "ko_KR",
+    type: "website",
+    images: [
+      {
+        url: imageUrl,
+        width: 1731,
+        height: 909,
+        alt: "JNUH PSY ER PSY Note",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: [imageUrl],
+  },
+};
 
 export default function RootLayout({
   children,
