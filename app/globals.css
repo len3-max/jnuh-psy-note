@@ -47,6 +47,8 @@ button { cursor: pointer; }
 .support-call.suicide strong { color: #3f80c4; }
 .support-call.bereaved strong { color: #e44e1a; }
 
+.mobile-section-nav { display: none; }
+
 .page-shell { max-width: 1440px; margin: 0 auto; display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 64px; padding: 32px 4vw 96px; }
 .side-nav { position: sticky; top: 120px; align-self: start; height: calc(100vh - 150px); display: flex; flex-direction: column; }
 .eyebrow { color: #8a9a92; font-size: 11px; font-weight: 800; letter-spacing: .18em; }
@@ -212,6 +214,11 @@ footer b { letter-spacing: .1em; }
 footer span { color: #bcd1c8; font-size: 13px; }
 
 @media (max-width: 1050px) {
+  .mobile-section-nav { display: block; position: sticky; top: 72px; z-index: 18; border-bottom: 1px solid #ccd8d2; background: rgba(251,252,249,.97); box-shadow: 0 5px 14px rgba(26,52,42,.06); backdrop-filter: blur(12px); }
+  .mobile-section-nav > div { display: flex; overflow-x: auto; padding: 0 4vw; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+  .mobile-section-nav button { flex: 0 0 auto; min-width: 112px; height: 52px; padding: 0 14px; border: 0; border-right: 1px solid #e2e8e5; background: transparent; color: #44564e; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; scroll-snap-align: start; font-size: 13px; font-weight: 700; }
+  .mobile-section-nav button:hover, .mobile-section-nav button:focus-visible { background: var(--mint); color: var(--green); outline: none; }
+  .mobile-section-nav button span { color: #8c9993; font: 700 10px Georgia, serif; }
   .support-banner-inner { grid-template-columns: 180px minmax(0, 1fr); gap: 14px; }
   .support-banner-title { padding: 18px; }
   .support-banner-title span { font-size: 15px; }
@@ -221,12 +228,16 @@ footer span { color: #bcd1c8; font-size: 13px; }
   .support-call strong { font-size: clamp(21px, 2.7vw, 27px); }
   .page-shell { grid-template-columns: 1fr; padding-top: 32px; gap: 0; }
   .side-nav { display: none; }
+  .form-section { scroll-margin-top: 138px; }
   .hero { padding-top: 10px; }
   .section-body { padding-left: 0; }
   .patient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 760px) {
   .topbar { height: 64px; }
+  .mobile-section-nav { top: 64px; }
+  .mobile-section-nav > div { padding: 0 12px; }
+  .mobile-section-nav button { min-width: 98px; height: 50px; padding: 0 11px; font-size: 12px; }
   .privacy { font-size: 0; }
   .top-actions { gap: 10px; }
   .reset-button.compact { padding: 0 10px; }
@@ -241,6 +252,7 @@ footer span { color: #bcd1c8; font-size: 13px; }
   .support-call strong { grid-column: 1; font-size: 27px; }
   .support-call small { grid-column: 2; grid-row: 1 / span 2; align-self: center; margin: 0; padding: 7px 9px; border: 1px solid #d4ded9; border-radius: 999px; }
   .page-shell { padding: 30px 20px 70px; }
+  .form-section { scroll-margin-top: 126px; }
   .hero { grid-template-columns: 1fr; min-height: 0; gap: 24px; align-content: start; padding: 8px 0 42px; }
   .hero h2 { font-size: 43px; }
   .section-heading { grid-template-columns: 34px 1fr; padding-top: 38px; }

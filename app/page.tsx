@@ -621,6 +621,17 @@ export default function Home() {
         </div>
       </section>
 
+      <nav className="mobile-section-nav" aria-label="모바일 평가 항목">
+        <div>
+          {sections.map(([id, label], index) => (
+            <button type="button" key={id} onClick={() => jumpTo(id)}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              {label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
       <div className="page-shell">
         <aside className="side-nav" aria-label="평가 항목">
           <div className="eyebrow">ASSESSMENT</div>
