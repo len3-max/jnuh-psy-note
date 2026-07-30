@@ -491,17 +491,28 @@ export default function Home() {
     });
     const cssrsIdeationResponses = CSSRS_IDEATION_ITEMS
       .filter((item) => value(item.key))
-      .map((item) => `${item.level}. ${item.title} ${value(item.key)}`)
+      .map((item) => `${item.level}. ${item.title} ${value(item.key) === "예" ? "(+)" : "(-)"}`)
       .join(", ");
     const cssrsIntensityResponses = CSSRS_INTENSITY_ITEMS
       .filter((item) => value(item.key))
-      .map((item) => `${item.title} ${value(item.key)}/5`)
+      .map((item) => {
+        const selectedValue = value(item.key);
+        const selectedOption = item.options.find((option) => option.value === selectedValue);
+        const answer = selectedOption
+          ? selectedOption.label.replace(" · ", "; ")
+          : selectedValue;
+        return `${item.title} ${answer}`;
+      })
       .join(", ");
     const cssrsBehaviorResponses = CSSRS_BEHAVIOR_ITEMS
       .filter((item) => value(item.key))
       .map((item) => {
         const count = item.countKey ? value(item.countKey) : undefined;
-        return `${item.title} ${value(item.key)}${count ? ` (${count}회)` : ""}`;
+        const isPositive = value(item.key) === "예";
+        const response = isPositive
+          ? count ? `(+, ${count}회)` : "(+)"
+          : "(-)";
+        return `${item.title} ${response}`;
       })
       .join(", ");
     const sections = [
