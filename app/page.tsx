@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 
 type FormState = Record<string, string>;
@@ -423,6 +424,7 @@ const sections = [
 ] as const;
 
 export default function Home() {
+  const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   const [form, setForm] = useState<FormState>({});
   const [scores, setScores] = useState<Record<string, number>>(
     Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])),
@@ -581,7 +583,7 @@ export default function Home() {
     <main>
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark" aria-hidden="true">+</span>
+          <Image className="brand-emblem" src={`${assetBasePath}/jnuh-emblem.png`} alt="제주대학교병원 엠블럼" width={46} height={46} unoptimized priority />
           <div>
             <strong>JNUH PSY</strong>
             <span>정신건강 응급평가</span>

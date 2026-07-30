@@ -19,7 +19,7 @@ button { cursor: pointer; }
 
 .topbar { height: 72px; padding: 0 4vw; border-bottom: 1px solid var(--line); background: rgba(251,252,249,.94); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px); }
 .brand { display: flex; align-items: center; gap: 12px; }
-.brand-mark { width: 36px; height: 36px; background: var(--green); color: white; display: grid; place-items: center; border-radius: 50%; font-size: 24px; font-weight: 300; }
+.brand-emblem { width: 46px; height: 46px; flex: 0 0 46px; border-radius: 50%; object-fit: cover; background: white; }
 .brand div { display: grid; gap: 1px; }
 .brand strong { font-size: 16px; letter-spacing: .08em; }
 .brand div span { font-size: 12px; color: var(--muted); }
@@ -277,7 +277,7 @@ footer span { color: #bcd1c8; font-size: 13px; }
 @media (max-width: 420px) {
   .topbar { padding: 0 14px; }
   .brand { gap: 9px; }
-  .brand-mark { width: 32px; height: 32px; font-size: 21px; }
+  .brand-emblem { width: 38px; height: 38px; flex-basis: 38px; }
   .brand strong { font-size: 14px; }
   .brand div span { font-size: 11px; }
   .privacy { display: none; }
