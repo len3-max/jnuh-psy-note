@@ -572,6 +572,38 @@ export default function Home() {
     window.setTimeout(() => setCopied(false), 2200);
   };
 
+  const exportSummary = () => {
+    const todayParts = new Intl.DateTimeFormat("ko-KR", {
+      timeZone: "Asia/Seoul",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const todayPart = (type: "year" | "month" | "day") =>
+      todayParts.find((part) => part.type === type)?.value || "";
+    const assessmentDate = form.assessmentDate?.trim().slice(0, 10)
+      || `${todayPart("year")}-${todayPart("month")}-${todayPart("day")}`;
+    const patientId = form.patientId?.trim() || "환자번호미기재";
+    const name = form.name?.trim() || "이름미기재";
+    const sex = form.sex?.trim() || "성별미기재";
+    const age = form.age?.trim() ? `${form.age.trim()}세` : "나이미기재";
+    const filename = `[${assessmentDate} ${patientId} ${name} ${sex}${age}]`
+      .replace(/[\\/:*?"<>|]/g, "-")
+      .replace(/\s+/g, " ")
+      .concat(".txt");
+    const file = new Blob(["\uFEFF", summaryText], {
+      type: "text/plain;charset=utf-8",
+    });
+    const downloadUrl = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(downloadUrl);
+  };
+
   const resetAssessment = () => {
     const confirmed = window.confirm(
       "입력한 환자정보, 병력, MSE, C-SSRS 위험도, PANSS 및 BPRS 점수를 모두 초기화할까요?",
@@ -989,7 +1021,13 @@ export default function Home() {
               <Field label="평가자"><input value={form.clinician || ""} onChange={(e) => setField("clinician", e.target.value)} placeholder="성명 / 직위" /></Field>
             </div>
             <div className="summary-preview">
-              <div className="summary-heading"><div><span>TEXT PREVIEW</span><h3>평가 기록 미리보기</h3></div><button onClick={copySummary}>{copied ? "복사 완료 ✓" : "전체 평가 복사"}</button></div>
+              <div className="summary-heading">
+                <div><span>TEXT PREVIEW</span><h3>평가 기록 미리보기</h3></div>
+                <div className="summary-actions">
+                  <button type="button" onClick={copySummary}>{copied ? "복사 완료 ✓" : "전체 평가 복사"}</button>
+                  <button type="button" className="export-button" onClick={exportSummary}>TXT 내보내기</button>
+                </div>
+              </div>
               <pre>{summaryText}</pre>
             </div>
           </Section>
@@ -999,7 +1037,11 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <footer><b>JNUH PSY</b><span>의료진용 임상 기록 보조 도구 · 환자 안전과 기관 지침을 우선하세요.</span></footer>
+      <footer>
+        <b>JNUH PSY</b>
+        <span>의료진용 임상 기록 보조 도구 · 환자 안전과 기관 지침을 우선하세요.</span>
+        <span className="developer-credit">Developed by JB, Last updated 2026-07-30</span>
+      </footer>
     </main>
   );
 }
