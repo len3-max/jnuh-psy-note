@@ -550,6 +550,8 @@ input:focus, textarea:focus, select:focus {
 .summary-heading button { border-radius: 8px; background: #1956a2; }
 .summary-heading button:hover { background: #0f4384; }
 .bottom-reset { padding: 28px 0 0; }
+.bottom-reset .reset-button { border-color: #a64539; background: #a64539; color: white; }
+.bottom-reset .reset-button:hover { border-color: #84362e; background: #84362e; color: white; }
 footer { background: linear-gradient(135deg, #0a438f, #1959a7); }
 footer span { color: #d6e7f8; }
 
@@ -580,6 +582,9 @@ footer span { color: #d6e7f8; }
   .section-body { padding: 24px 22px 32px; }
   .section-heading h2 { font-size: 26px; }
   .mse-card { padding: 18px; }
+  .summary-heading { align-items: stretch; flex-direction: column; gap: 14px; }
+  .summary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; }
+  .summary-heading button { width: 100%; min-width: 0; padding: 10px 8px; font-size: 12px; white-space: nowrap; }
 }
 
 @media (max-width: 420px) {

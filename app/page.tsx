@@ -581,12 +581,14 @@ export default function Home() {
     }).formatToParts(new Date());
     const todayPart = (type: "year" | "month" | "day") =>
       todayParts.find((part) => part.type === type)?.value || "";
-    const assessmentDate = form.assessmentDate?.trim().slice(0, 10)
-      || `${todayPart("year")}-${todayPart("month")}-${todayPart("day")}`;
+    const assessmentDate = (
+      form.assessmentDate?.trim().slice(0, 10)
+      || `${todayPart("year")}-${todayPart("month")}-${todayPart("day")}`
+    ).replaceAll("-", "");
     const patientId = form.patientId?.trim() || "환자번호미기재";
     const name = form.name?.trim() || "이름미기재";
-    const sex = form.sex?.trim() || "성별미기재";
-    const age = form.age?.trim() ? `${form.age.trim()}세` : "나이미기재";
+    const sex = form.sex === "남성" ? "M" : form.sex === "여성" ? "F" : "U";
+    const age = form.age?.trim() || "NA";
     const filename = `[${assessmentDate} ${patientId} ${name} ${sex}${age}]`
       .replace(/[\\/:*?"<>|]/g, "-")
       .replace(/\s+/g, " ")
