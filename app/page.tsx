@@ -24,6 +24,25 @@ type MseSection = {
   definition: string;
   options: MseOption[];
 };
+type CssrsIdeationItem = {
+  key: string;
+  level: number;
+  title: string;
+  definition: string;
+  question: string;
+};
+type CssrsIntensityItem = {
+  key: string;
+  title: string;
+  question: string;
+  options: Array<{ value: string; label: string }>;
+};
+type CssrsBehaviorItem = {
+  key: string;
+  countKey?: string;
+  title: string;
+  definition: string;
+};
 
 const PANSS_ITEMS: PanssItem[] = [
   { code: "P1", name: "망상", group: "P", definition: "현실적 근거가 없고 문화적 맥락으로 설명되지 않는 확고한 믿음.", example: "근거 없이 ‘누군가 음식에 독을 탄다’고 확신하며 식사를 거부함." },
@@ -250,6 +269,141 @@ const MSE_SECTIONS: MseSection[] = [
   },
 ];
 
+const CSSRS_IDEATION_ITEMS: CssrsIdeationItem[] = [
+  {
+    key: "cssrsWishToBeDead",
+    level: 1,
+    title: "죽고 싶은 소망",
+    definition: "죽고 싶거나 더 이상 살고 싶지 않다는 수동적 바람.",
+    question: "마지막 방문 이후 죽고 싶거나, 잠든 뒤 깨어나지 않았으면 좋겠다고 생각한 적이 있습니까?",
+  },
+  {
+    key: "cssrsSuicidalThought",
+    level: 2,
+    title: "비특이적 적극적 자살사고",
+    definition: "방법·의도·계획은 정하지 않았지만 스스로 목숨을 끊는 것을 생각함.",
+    question: "마지막 방문 이후 실제로 자살을 생각한 적이 있습니까?",
+  },
+  {
+    key: "cssrsMethod",
+    level: 3,
+    title: "방법을 생각한 자살사고",
+    definition: "구체적인 실행 계획이나 의도는 없지만 한 가지 이상의 방법을 생각함.",
+    question: "어떤 방법으로 실행할지 생각했으나 구체적인 계획이나 실행 의도는 없었습니까?",
+  },
+  {
+    key: "cssrsIntent",
+    level: 4,
+    title: "계획 없이 실행 의도가 있는 자살사고",
+    definition: "구체적 계획은 없지만 생각을 실행에 옮길 의도가 어느 정도 있음.",
+    question: "구체적인 계획은 없더라도 실제로 실행할 의도가 어느 정도 있었습니까?",
+  },
+  {
+    key: "cssrsPlanIntent",
+    level: 5,
+    title: "구체적 계획과 의도가 있는 자살사고",
+    definition: "방법·시간·장소 등 계획의 전부 또는 일부를 세웠고 실행 의도도 있음.",
+    question: "구체적인 자살 계획을 세웠으며 이를 실행할 의도가 있었습니까?",
+  },
+];
+
+const CSSRS_INTENSITY_ITEMS: CssrsIntensityItem[] = [
+  {
+    key: "cssrsFrequency",
+    title: "빈도",
+    question: "가장 심각한 자살사고가 얼마나 자주 있었습니까?",
+    options: [
+      { value: "1", label: "1 · 일주일에 한 번 미만" },
+      { value: "2", label: "2 · 일주일에 한 번" },
+      { value: "3", label: "3 · 일주일에 2~5번" },
+      { value: "4", label: "4 · 매일 또는 거의 매일" },
+      { value: "5", label: "5 · 매일 여러 번" },
+    ],
+  },
+  {
+    key: "cssrsDuration",
+    title: "지속 시간",
+    question: "한번 시작된 생각이 얼마나 오래 지속되었습니까?",
+    options: [
+      { value: "1", label: "1 · 몇 초~몇 분" },
+      { value: "2", label: "2 · 1시간 미만" },
+      { value: "3", label: "3 · 1~4시간" },
+      { value: "4", label: "4 · 4~8시간" },
+      { value: "5", label: "5 · 8시간 이상 또는 지속적" },
+    ],
+  },
+  {
+    key: "cssrsControllability",
+    title: "통제 가능성",
+    question: "원할 때 자살사고를 중단하거나 통제할 수 있었습니까?",
+    options: [
+      { value: "0", label: "0 · 통제하려고 노력하지 않음" },
+      { value: "1", label: "1 · 쉽게 통제 가능" },
+      { value: "2", label: "2 · 거의 어렵지 않음" },
+      { value: "3", label: "3 · 약간 어려움" },
+      { value: "4", label: "4 · 많이 어려움" },
+      { value: "5", label: "5 · 통제할 수 없음" },
+    ],
+  },
+  {
+    key: "cssrsDeterrents",
+    title: "저지 요인",
+    question: "가족·종교·죽음에 대한 두려움 등 실행을 막는 요인이 있었습니까?",
+    options: [
+      { value: "0", label: "0 · 해당 없음" },
+      { value: "1", label: "1 · 확실한 저지 요인 있음" },
+      { value: "2", label: "2 · 저지 요인이 있는 것 같음" },
+      { value: "3", label: "3 · 확실하지 않음" },
+      { value: "4", label: "4 · 저지 요인이 없는 것 같음" },
+      { value: "5", label: "5 · 저지 요인이 분명히 없음" },
+    ],
+  },
+  {
+    key: "cssrsReasons",
+    title: "자살사고의 이유",
+    question: "타인의 반응을 얻으려는 목적과 고통을 끝내려는 목적 중 어느 쪽에 가까웠습니까?",
+    options: [
+      { value: "0", label: "0 · 해당 없음" },
+      { value: "1", label: "1 · 전적으로 타인의 반응을 얻기 위함" },
+      { value: "2", label: "2 · 주로 타인의 반응을 얻기 위함" },
+      { value: "3", label: "3 · 두 이유가 비슷함" },
+      { value: "4", label: "4 · 주로 고통을 끝내기 위함" },
+      { value: "5", label: "5 · 전적으로 고통을 끝내기 위함" },
+    ],
+  },
+];
+
+const CSSRS_BEHAVIOR_ITEMS: CssrsBehaviorItem[] = [
+  {
+    key: "cssrsActualAttempt",
+    countKey: "cssrsActualAttemptCount",
+    title: "실제 자살기도",
+    definition: "조금이라도 죽으려는 의도가 동반된 잠재적 자해행동. 실제 손상 발생 여부와 무관합니다.",
+  },
+  {
+    key: "cssrsInterruptedAttempt",
+    countKey: "cssrsInterruptedAttemptCount",
+    title: "방해된 기도",
+    definition: "자해행동을 시작하려 했으나 다른 사람이나 외부 상황 때문에 실행 전에 중단된 경우.",
+  },
+  {
+    key: "cssrsAbortedAttempt",
+    countKey: "cssrsAbortedAttemptCount",
+    title: "중단된 기도",
+    definition: "자해행동을 시작하려 했으나 실제 실행 전에 본인이 스스로 중단한 경우.",
+  },
+  {
+    key: "cssrsPreparatoryBehavior",
+    title: "준비 행위",
+    definition: "수단 확보, 약물 수집, 유서 작성, 물건 나눠주기 등 생각을 넘어선 준비행동.",
+  },
+  {
+    key: "cssrsNssi",
+    title: "비자살적 자해행동",
+    definition: "죽으려는 의도 없이 긴장 완화·감정 조절 등의 목적으로 한 자해행동.",
+  },
+];
+
 const HISTORY_FIELDS = [
   ["chiefComplaint", "주호소", "환자의 표현을 가능한 그대로 기록하고, 발병 시기와 최근 악화 시기를 함께 기재", 3],
   ["presentIllness", "현병력", "증상 시작, 경과, 악화 요인, 기능 변화, 응급실 방문 경위", 5],
@@ -311,6 +465,12 @@ export default function Home() {
     [bprsScores],
   );
 
+  const cssrsIdeationAnswered = CSSRS_IDEATION_ITEMS.some((item) => Boolean(form[item.key]));
+  const highestCssrsIdeation = CSSRS_IDEATION_ITEMS.reduce(
+    (highest, item) => form[item.key] === "예" ? Math.max(highest, item.level) : highest,
+    0,
+  );
+
   const summaryText = useMemo(() => {
     const value = (key: string) => form[key]?.trim();
     const makeSection = (title: string, lines: Array<string | undefined>) => {
@@ -327,6 +487,21 @@ export default function Home() {
       if (!selected && !description) return undefined;
       return `- ${section.title}: ${[selected, description].filter(Boolean).join(" / ")}`;
     });
+    const cssrsIdeationResponses = CSSRS_IDEATION_ITEMS
+      .filter((item) => value(item.key))
+      .map((item) => `${item.level}. ${item.title} ${value(item.key)}`)
+      .join(", ");
+    const cssrsIntensityResponses = CSSRS_INTENSITY_ITEMS
+      .filter((item) => value(item.key))
+      .map((item) => `${item.title} ${value(item.key)}/5`)
+      .join(", ");
+    const cssrsBehaviorResponses = CSSRS_BEHAVIOR_ITEMS
+      .filter((item) => value(item.key))
+      .map((item) => {
+        const count = item.countKey ? value(item.countKey) : undefined;
+        return `${item.title} ${value(item.key)}${count ? ` (${count}회)` : ""}`;
+      })
+      .join(", ");
     const sections = [
       makeSection("환자 정보", [
         value("name") ? `이름: ${value("name")}` : undefined,
@@ -342,7 +517,16 @@ export default function Home() {
       value("substanceHistory") ? `[물질사용력]\n${value("substanceHistory")}` : "",
       makeSection("Mental Status Examination", mseLines),
       makeSection("위험도 평가", [
-        value("suicideRisk") ? `- 자살사고/계획/의도: ${value("suicideRisk")}` : undefined,
+        cssrsIdeationResponses ? `- C-SSRS 자살사고: ${cssrsIdeationResponses}` : undefined,
+        cssrsIdeationAnswered ? `- 자살사고 최고 심각도: ${highestCssrsIdeation}/5` : undefined,
+        cssrsIntensityResponses ? `- 자살사고 강도: ${cssrsIntensityResponses}` : undefined,
+        value("cssrsIdeationDescription") ? `- 가장 심각한 자살사고 설명: ${value("cssrsIdeationDescription")}` : undefined,
+        cssrsBehaviorResponses ? `- C-SSRS 자살행동: ${cssrsBehaviorResponses}` : undefined,
+        value("cssrsBehaviorDescription") ? `- 자살행동 세부 내용: ${value("cssrsBehaviorDescription")}` : undefined,
+        value("cssrsLethalAttemptDate") ? `- 가장 치명적인 기도 날짜: ${value("cssrsLethalAttemptDate")}` : undefined,
+        value("cssrsActualLethality") ? `- 실제적 치명성: ${value("cssrsActualLethality")}` : undefined,
+        value("cssrsPotentialLethality") ? `- 잠재적 치명성: ${value("cssrsPotentialLethality")}` : undefined,
+        value("suicideRisk") ? `- 자살위험 종합 소견: ${value("suicideRisk")}` : undefined,
         value("violenceRisk") ? `- 타해사고/위협: ${value("violenceRisk")}` : undefined,
         value("meansAccess") ? `- 자해·타해 수단 접근성: ${value("meansAccess")}` : undefined,
         value("protectiveFactors") ? `- 보호요인: ${value("protectiveFactors")}` : undefined,
@@ -365,7 +549,7 @@ export default function Home() {
     ].filter(Boolean).join("\n");
 
     return `${header}\n\n${sections.join("\n\n")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
-  }, [bprsTotal, form, mseSelections, totals]);
+  }, [bprsTotal, cssrsIdeationAnswered, form, highestCssrsIdeation, mseSelections, totals]);
 
   const copySummary = async () => {
     await navigator.clipboard.writeText(summaryText);
@@ -375,7 +559,7 @@ export default function Home() {
 
   const resetAssessment = () => {
     const confirmed = window.confirm(
-      "입력한 환자정보, 병력, MSE, 위험도, PANSS 및 BPRS 점수를 모두 초기화할까요?",
+      "입력한 환자정보, 병력, MSE, C-SSRS 위험도, PANSS 및 BPRS 점수를 모두 초기화할까요?",
     );
     if (!confirmed) return;
 
@@ -543,8 +727,143 @@ export default function Home() {
 
           <Section id="risk" number="04" title="응급 위험도 평가" description="현재의 자·타해 위험과 즉시 필요한 안전조치를 확인합니다." urgent>
             <div className="risk-alert"><span>!</span><p><b>위험이 임박한 경우</b> 평가 입력을 중단하고 기관의 응급 안전 프로토콜을 즉시 시행하세요.</p></div>
+            <div className="cssrs-panel">
+              <div className="cssrs-heading">
+                <div>
+                  <span>C-SSRS · SINCE LAST VISIT</span>
+                  <h3>구조화 자살위험 평가</h3>
+                  <p>첨부된 C-SSRS 한국어판의 구분을 바탕으로 마지막 방문 이후의 자살사고와 행동을 확인합니다.</p>
+                </div>
+                <div className={`cssrs-level ${highestCssrsIdeation >= 4 ? "high" : ""}`}>
+                  <span>사고 최고 심각도</span>
+                  <strong>{cssrsIdeationAnswered ? highestCssrsIdeation : "—"}</strong>
+                  <small>/ 5</small>
+                </div>
+              </div>
+
+              <div className="cssrs-note">
+                <b>면담 순서</b>
+                <span>1·2번을 먼저 확인하고, 2번이 ‘예’이면 3–5번을 이어서 평가합니다. 이 기록 도구는 정식 교육과 임상 판단을 대체하지 않습니다.</span>
+              </div>
+
+              <div className="cssrs-subsection">
+                <div className="cssrs-subheading">
+                  <div><span>01</span><h4>자살사고 심각도</h4></div>
+                  <p>각 문항을 예/아니오로 평가하고, ‘예’인 항목 중 가장 높은 단계를 확인합니다.</p>
+                </div>
+                <div className="cssrs-list">
+                  {CSSRS_IDEATION_ITEMS.map((item) => (
+                    <div className="cssrs-item" key={item.key}>
+                      <span className="cssrs-number">{item.level}</span>
+                      <div className="cssrs-copy">
+                        <b>{item.title}</b>
+                        <p>{item.question}</p>
+                        <small>{item.definition}</small>
+                      </div>
+                      <BinaryChoice value={form[item.key] || ""} onChange={(choice) => setField(item.key, choice)} label={`${item.level}. ${item.title}`} />
+                    </div>
+                  ))}
+                </div>
+                <Field label="가장 심각한 자살사고 설명">
+                  <textarea
+                    rows={3}
+                    value={form.cssrsIdeationDescription || ""}
+                    onChange={(e) => setField("cssrsIdeationDescription", e.target.value)}
+                    placeholder="방법, 대상 시점, 상황, 환자의 표현과 평가자의 판단을 구체적으로 기록"
+                  />
+                </Field>
+              </div>
+
+              <div className="cssrs-subsection">
+                <div className="cssrs-subheading">
+                  <div><span>02</span><h4>자살사고 강도</h4></div>
+                  <p>가장 심각했던 자살사고를 기준으로 평가합니다. 숫자가 높을수록 대체로 위험한 양상을 의미합니다.</p>
+                </div>
+                <div className="cssrs-intensity-grid">
+                  {CSSRS_INTENSITY_ITEMS.map((item) => (
+                    <label className="cssrs-scale-field" key={item.key}>
+                      <span>{item.title}</span>
+                      <small>{item.question}</small>
+                      <select value={form[item.key] || ""} onChange={(e) => setField(item.key, e.target.value)}>
+                        <option value="">미평가</option>
+                        {item.options.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}
+                      </select>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="cssrs-subsection">
+                <div className="cssrs-subheading">
+                  <div><span>03</span><h4>자살행동</h4></div>
+                  <p>서로 다른 유형이 함께 존재할 수 있으므로 모든 항목을 각각 확인합니다.</p>
+                </div>
+                <div className="cssrs-list behavior">
+                  {CSSRS_BEHAVIOR_ITEMS.map((item) => (
+                    <div className="cssrs-item" key={item.key}>
+                      <div className="cssrs-copy">
+                        <b>{item.title}</b>
+                        <small>{item.definition}</small>
+                      </div>
+                      {item.countKey && form[item.key] === "예" && (
+                        <label className="cssrs-count">
+                          <span>횟수</span>
+                          <input
+                            type="number"
+                            min="0"
+                            value={form[item.countKey] || ""}
+                            onChange={(e) => setField(item.countKey!, e.target.value)}
+                            aria-label={`${item.title} 횟수`}
+                          />
+                        </label>
+                      )}
+                      <BinaryChoice
+                        value={form[item.key] || ""}
+                        onChange={(choice) => {
+                          setField(item.key, choice);
+                          if (item.countKey && choice !== "예") setField(item.countKey, "");
+                        }}
+                        label={item.title}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <Field label="자살행동 세부 내용">
+                  <textarea
+                    rows={4}
+                    value={form.cssrsBehaviorDescription || ""}
+                    onChange={(e) => setField("cssrsBehaviorDescription", e.target.value)}
+                    placeholder="일시, 방법, 의도, 중단 경위, 구조 과정, 의학적 손상과 비자살적 자해 여부를 기록"
+                  />
+                </Field>
+                <div className="cssrs-lethality-grid">
+                  <Field label="가장 치명적인 기도 날짜">
+                    <input type="date" value={form.cssrsLethalAttemptDate || ""} onChange={(e) => setField("cssrsLethalAttemptDate", e.target.value)} />
+                  </Field>
+                  <Field label="실제적 치명성 / 의학적 손상">
+                    <select value={form.cssrsActualLethality || ""} onChange={(e) => setField("cssrsActualLethality", e.target.value)}>
+                      <option value="">미평가</option>
+                      <option value="0 · 손상 없음 또는 매우 경미">0 · 손상 없음 또는 매우 경미</option>
+                      <option value="1 · 경미한 신체 손상">1 · 경미한 신체 손상</option>
+                      <option value="2 · 의학적 처치가 필요한 중등도 손상">2 · 의학적 처치가 필요한 중등도 손상</option>
+                      <option value="3 · 입원이 필요한 중고도 손상">3 · 입원이 필요한 중고도 손상</option>
+                      <option value="4 · 집중치료가 필요한 심각한 손상">4 · 집중치료가 필요한 심각한 손상</option>
+                      <option value="5 · 사망">5 · 사망</option>
+                    </select>
+                  </Field>
+                  <Field label="잠재적 치명성 (실제적 치명성 0인 경우)">
+                    <select value={form.cssrsPotentialLethality || ""} onChange={(e) => setField("cssrsPotentialLethality", e.target.value)}>
+                      <option value="">미평가</option>
+                      <option value="0 · 상해 가능성이 거의 없음">0 · 상해 가능성이 거의 없음</option>
+                      <option value="1 · 상해 가능성은 높으나 사망 가능성은 낮음">1 · 상해 가능성은 높으나 사망 가능성은 낮음</option>
+                      <option value="2 · 의학적 치료에도 사망 가능성이 높음">2 · 의학적 치료에도 사망 가능성이 높음</option>
+                    </select>
+                  </Field>
+                </div>
+              </div>
+            </div>
             <div className="mse-grid">
-              <Field label="자살사고 / 계획 / 의도"><textarea rows={3} value={form.suicideRisk || ""} onChange={(e) => setField("suicideRisk", e.target.value)} placeholder="현재·최근 사고, 구체적 계획, 의도, 과거 시도" /></Field>
+              <Field label="자살위험 종합 소견"><textarea rows={3} value={form.suicideRisk || ""} onChange={(e) => setField("suicideRisk", e.target.value)} placeholder="C-SSRS 결과와 현재 상태를 종합한 임상 판단" /></Field>
               <Field label="타해사고 / 위협"><textarea rows={3} value={form.violenceRisk || ""} onChange={(e) => setField("violenceRisk", e.target.value)} placeholder="대상, 계획, 의도, 최근 폭력·흥분" /></Field>
               <Field label="수단 접근성"><textarea rows={3} value={form.meansAccess || ""} onChange={(e) => setField("meansAccess", e.target.value)} placeholder="약물, 무기 등 치명적 수단의 접근 가능성" /></Field>
               <Field label="보호요인"><textarea rows={3} value={form.protectiveFactors || ""} onChange={(e) => setField("protectiveFactors", e.target.value)} placeholder="보호자, 치료 동기, 지지체계, 책임감" /></Field>
@@ -656,6 +975,24 @@ export default function Home() {
       </div>
       <footer><b>JNUH PSY</b><span>의료진용 임상 기록 보조 도구 · 환자 안전과 기관 지침을 우선하세요.</span></footer>
     </main>
+  );
+}
+
+function BinaryChoice({ value, onChange, label }: { value: string; onChange: (value: string) => void; label: string }) {
+  return (
+    <div className="binary-choice" role="group" aria-label={`${label} 응답`}>
+      {["예", "아니오"].map((choice) => (
+        <button
+          type="button"
+          key={choice}
+          className={value === choice ? "selected" : ""}
+          aria-pressed={value === choice}
+          onClick={() => onChange(value === choice ? "" : choice)}
+        >
+          {choice}
+        </button>
+      ))}
+    </div>
   );
 }
 
