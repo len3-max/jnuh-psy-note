@@ -82,8 +82,8 @@ button { cursor: pointer; }
 .field i { font-style: normal; font-weight: 600; font-size: 11px; color: var(--red); margin-left: 6px; }
 input, textarea, select { width: 100%; min-width: 0; max-width: 100%; border: 1px solid #ccd8d2; border-radius: 2px; background: #fff; color: var(--ink); outline: none; transition: border .2s, box-shadow .2s; }
 input, select { height: 48px; padding: 0 13px; }
-input[type="datetime-local"] { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; -webkit-appearance: none; appearance: none; }
-input[type="datetime-local"]::-webkit-date-and-time-value { min-width: 0; text-align: left; }
+input[type="date"], input[type="datetime-local"] { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; -webkit-appearance: none; appearance: none; }
+input[type="date"]::-webkit-date-and-time-value, input[type="datetime-local"]::-webkit-date-and-time-value { min-width: 0; text-align: left; }
 textarea { padding: 12px 13px; resize: vertical; line-height: 1.6; min-height: 76px; }
 input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0 0 0 3px rgba(69,128,110,.1); }
 ::placeholder { color: #a5b0aa; }
@@ -153,7 +153,8 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .cssrs-count { width: 78px; display: grid; gap: 4px; }
 .cssrs-count span { color: #776762; font-size: 11px; font-weight: 700; }
 .cssrs-count input { height: 42px; padding: 0 8px; }
-.cssrs-lethality-grid { margin-top: 18px; display: grid; grid-template-columns: .75fr 1.15fr 1.3fr; gap: 16px; }
+.cssrs-lethality-grid { margin-top: 18px; display: grid; grid-template-columns: minmax(0, .75fr) minmax(0, 1.15fr) minmax(0, 1.3fr); gap: 16px; }
+.cssrs-lethality-grid > .field { min-width: 0; overflow: hidden; }
 .risk-footer { display: grid; grid-template-columns: .8fr 1.2fr; gap: 24px; margin-top: 24px; }
 .segmented { display: grid; grid-template-columns: repeat(4, 1fr); }
 .segmented button { height: 48px; border: 1px solid #ccd8d2; border-right: 0; background: white; color: #65766f; font-size: 14px; }
@@ -222,6 +223,8 @@ footer .developer-credit { margin-left: auto; color: #e2effb; }
 
 @media (max-width: 1400px) {
   .patient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cssrs-lethality-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cssrs-lethality-grid > .field:last-child { grid-column: 1 / -1; }
 }
 
 @media (max-width: 1050px) {
@@ -249,6 +252,8 @@ footer .developer-credit { margin-left: auto; color: #e2effb; }
   .patient-meta-row { flex-direction: column; gap: 26px; }
   .patient-meta-row > .field { flex: none; width: 100%; }
   .patient-grid > .field:last-child { grid-column: auto; }
+  .cssrs-lethality-grid { grid-template-columns: 1fr; }
+  .cssrs-lethality-grid > .field:last-child { grid-column: auto; }
 }
 @media (max-width: 760px) {
   .topbar { height: 64px; }
