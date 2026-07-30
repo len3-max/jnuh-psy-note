@@ -722,12 +722,14 @@ export default function Home() {
               <Field label="환자번호">
                 <input value={form.patientId || ""} onChange={(e) => setField("patientId", e.target.value)} placeholder="선택 입력" />
               </Field>
-              <Field label="평가일시">
-                <input type="datetime-local" value={form.assessmentDate || ""} onChange={(e) => setField("assessmentDate", e.target.value)} />
-              </Field>
-              <Field label="정보제공자 / 신뢰도">
-                <input value={form.informant || ""} onChange={(e) => setField("informant", e.target.value)} placeholder="예: 본인·보호자 / 중간" />
-              </Field>
+              <div className="patient-meta-row">
+                <Field label="평가일시">
+                  <input type="datetime-local" value={form.assessmentDate || ""} onChange={(e) => setField("assessmentDate", e.target.value)} />
+                </Field>
+                <Field label="정보제공자 / 신뢰도">
+                  <input value={form.informant || ""} onChange={(e) => setField("informant", e.target.value)} placeholder="예: 본인·보호자 / 중간" />
+                </Field>
+              </div>
               <Field label="참고사항">
                 <textarea rows={3} value={form.patientNote || ""} onChange={(e) => setField("patientNote", e.target.value)} placeholder="재발 여부, 의뢰 사유, 보호자 연락 상황 등 참고할 내용을 입력" />
               </Field>
