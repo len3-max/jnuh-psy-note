@@ -595,6 +595,17 @@ export default function Home() {
         </div>
       </header>
 
+      <nav className="mobile-section-nav" aria-label="평가 항목 바로가기">
+        <div>
+          {sections.map(([id, label], index) => (
+            <button type="button" key={id} onClick={() => jumpTo(id)}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              {label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
       <section className="support-banner" aria-labelledby="support-banner-title">
         <div className="support-banner-inner">
           <div className="support-banner-title" id="support-banner-title">
@@ -620,17 +631,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <nav className="mobile-section-nav" aria-label="모바일 평가 항목">
-        <div>
-          {sections.map(([id, label], index) => (
-            <button type="button" key={id} onClick={() => jumpTo(id)}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              {label}
-            </button>
-          ))}
-        </div>
-      </nav>
 
       <div className="page-shell">
         <aside className="side-nav" aria-label="평가 항목">
@@ -745,7 +745,7 @@ export default function Home() {
                 <div>
                   <span>C-SSRS · SINCE LAST VISIT</span>
                   <h3>구조화 자살위험 평가</h3>
-                  <p>첨부된 C-SSRS 한국어판의 구분을 바탕으로 마지막 방문 이후의 자살사고와 행동을 확인합니다.</p>
+                  <p>마지막 방문 이후의 자살사고와 행동을 단계적으로 확인합니다.</p>
                 </div>
                 <div className={`cssrs-level ${highestCssrsIdeation >= 4 ? "high" : ""}`}>
                   <span>사고 최고 심각도</span>
