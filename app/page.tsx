@@ -475,6 +475,8 @@ export default function Home() {
 
   const summaryText = useMemo(() => {
     const value = (key: string) => form[key]?.trim();
+    const withoutScaleNumber = (response: string) =>
+      response.replace(/^\d+\s*[·;]\s*/, "");
     const makeSection = (title: string, lines: Array<string | undefined>) => {
       const visibleLines = lines.filter((line): line is string => Boolean(line));
       return visibleLines.length ? `[${title}]\n${visibleLines.join("\n")}` : "";
@@ -499,7 +501,7 @@ export default function Home() {
         const selectedValue = value(item.key);
         const selectedOption = item.options.find((option) => option.value === selectedValue);
         const answer = selectedOption
-          ? selectedOption.label.replace(" · ", "; ")
+          ? withoutScaleNumber(selectedOption.label)
           : selectedValue;
         return `${item.title} ${answer}`;
       })
@@ -537,8 +539,8 @@ export default function Home() {
         cssrsBehaviorResponses ? `- C-SSRS 자살행동: ${cssrsBehaviorResponses}` : undefined,
         value("cssrsBehaviorDescription") ? `- 자살행동 세부 내용: ${value("cssrsBehaviorDescription")}` : undefined,
         value("cssrsLethalAttemptDate") ? `- 가장 치명적인 기도 날짜: ${value("cssrsLethalAttemptDate")}` : undefined,
-        value("cssrsActualLethality") ? `- 실제적 치명성: ${value("cssrsActualLethality")}` : undefined,
-        value("cssrsPotentialLethality") ? `- 잠재적 치명성: ${value("cssrsPotentialLethality")}` : undefined,
+        value("cssrsActualLethality") ? `- 실제적 치명성: ${withoutScaleNumber(value("cssrsActualLethality")!)}` : undefined,
+        value("cssrsPotentialLethality") ? `- 잠재적 치명성: ${withoutScaleNumber(value("cssrsPotentialLethality")!)}` : undefined,
         value("suicideRisk") ? `- 자살위험 종합 소견: ${value("suicideRisk")}` : undefined,
         value("violenceRisk") ? `- 타해사고/위협: ${value("violenceRisk")}` : undefined,
         value("meansAccess") ? `- 자해·타해 수단 접근성: ${value("meansAccess")}` : undefined,
