@@ -5,7 +5,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ??
   "https://psy-er-assessment.exact-cloud-8851.chatgpt.site";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const imageUrl = `${siteUrl}/og-v3.png`;
+const imageUrl = `${siteUrl}/og-v4.png`;
 const title = "JNUH PSY | ER PSY Note";
 const description =
   "정신건강의학과 응급 환자의 병력, 정신상태검사, 위험도 및 PANSS를 구조화하여 기록하는 임상 보조 도구";
