@@ -75,13 +75,15 @@ button { cursor: pointer; }
 .field-grid { display: grid; gap: 26px 20px; }
 .patient-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .7fr) minmax(0, .55fr) minmax(0, 1fr); }
 .patient-meta-row { grid-column: 1 / -1; display: flex; gap: 24px; min-width: 0; }
-.patient-meta-row > .field { flex: 1 1 0; width: 0; min-width: 0; }
+.patient-meta-row > .field { flex: 1 1 0; width: 0; min-width: 0; overflow: hidden; }
 .patient-grid > .field:last-child { grid-column: 1 / -1; }
 .field { display: grid; gap: 9px; min-width: 0; }
 .field > span { color: #394b44; font-size: 14px; font-weight: 700; }
 .field i { font-style: normal; font-weight: 600; font-size: 11px; color: var(--red); margin-left: 6px; }
 input, textarea, select { width: 100%; min-width: 0; max-width: 100%; border: 1px solid #ccd8d2; border-radius: 2px; background: #fff; color: var(--ink); outline: none; transition: border .2s, box-shadow .2s; }
 input, select { height: 48px; padding: 0 13px; }
+input[type="datetime-local"] { display: block; inline-size: 100%; min-inline-size: 0; max-inline-size: 100%; -webkit-appearance: none; appearance: none; }
+input[type="datetime-local"]::-webkit-date-and-time-value { min-width: 0; text-align: left; }
 textarea { padding: 12px 13px; resize: vertical; line-height: 1.6; min-height: 76px; }
 input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0 0 0 3px rgba(69,128,110,.1); }
 ::placeholder { color: #a5b0aa; }
@@ -241,6 +243,12 @@ footer .developer-credit { margin-left: auto; color: #e2effb; }
   .hero { padding-top: 10px; }
   .section-body { padding-left: 0; }
   .patient-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .patient-grid { grid-template-columns: 1fr; }
+  .patient-meta-row { flex-direction: column; gap: 26px; }
+  .patient-meta-row > .field { flex: none; width: 100%; }
+  .patient-grid > .field:last-child { grid-column: auto; }
 }
 @media (max-width: 760px) {
   .topbar { height: 64px; }
