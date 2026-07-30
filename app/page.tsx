@@ -491,7 +491,7 @@ export default function Home() {
     });
     const cssrsIdeationResponses = CSSRS_IDEATION_ITEMS
       .filter((item) => value(item.key))
-      .map((item) => `${item.level}. ${item.title} ${value(item.key) === "예" ? "(+)" : "(-)"}`)
+      .map((item) => `${item.title} ${value(item.key) === "예" ? "(+)" : "(-)"}`)
       .join(", ");
     const cssrsIntensityResponses = CSSRS_INTENSITY_ITEMS
       .filter((item) => value(item.key))
