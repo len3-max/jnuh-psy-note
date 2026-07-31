@@ -45,6 +45,248 @@ type CssrsBehaviorItem = {
   title: string;
   definition: string;
 };
+type PhqItem = {
+  code: string;
+  question: string;
+};
+type YmrsItem = {
+  code: string;
+  name: string;
+  englishName: string;
+  anchors: Array<{ score: number; label: string }>;
+  questions: string[];
+  criterion: string;
+};
+
+const PHQ_ITEMS: PhqItem[] = [
+  { code: "PHQ1", question: "기분이 가라앉거나, 우울하거나 희망이 없다고 느꼈다." },
+  { code: "PHQ2", question: "평소 하던 일에 대한 흥미가 없어지거나 즐거움을 느끼지 못했다." },
+  { code: "PHQ3", question: "잠들기가 어렵거나 자주 깼다. 혹은 너무 많이 잤다." },
+  { code: "PHQ4", question: "평소보다 식욕이 줄었다. 혹은 평소보다 많이 먹었다." },
+  { code: "PHQ5", question: "다른 사람들이 눈치 챌 정도로 평소보다 말과 행동이 느려졌다. 혹은 너무 안절부절못해서 가만히 앉아 있을 수 없었다." },
+  { code: "PHQ6", question: "피곤하고 기운이 없었다." },
+  { code: "PHQ7", question: "내가 잘못했거나 실패했다는 생각이 들었다. 혹은 자신과 가족을 실망시켰다고 생각했다." },
+  { code: "PHQ8", question: "학교 공부, 독서, TV 시청 같은 일상적인 일에도 집중할 수가 없었다." },
+  { code: "PHQ9", question: "차라리 죽는 것이 더 낫겠다고 생각했다. 혹은 자해할 생각을 했다." },
+];
+
+const PHQ_OPTIONS = [
+  { score: 0, label: "없었음" },
+  { score: 1, label: "2일 이상" },
+  { score: 2, label: "1주일 이상" },
+  { score: 3, label: "거의 매일" },
+];
+
+const YMRS_ITEMS: YmrsItem[] = [
+  {
+    code: "Y1",
+    name: "고조된 기분",
+    englishName: "Elevated Mood",
+    anchors: [
+      { score: 0, label: "없다." },
+      { score: 1, label: "물어보았을 때 경도로 고조되었거나 고조되어 있을 가능성이 있다." },
+      { score: 2, label: "주관적으로 명백하게 고조되어 있다. 낙관적이거나 자신감에 차 있고 유쾌하며 내용에 적절하다." },
+      { score: 3, label: "고조되어 있거나 내용에 부적절하다. 익살맞다." },
+      { score: 4, label: "다행감. 부적절하게 웃거나 노래를 부른다." },
+    ],
+    questions: [
+      "지난 한 주 동안 기분이 어땠습니까?",
+      "미래에 대해 낙관적이었습니까? 그렇게 느낄 만한 이유가 있었습니까?",
+      "특별히 자신감이 넘쳤습니까?",
+      "기분이 좋거나 약간 들뜬 것처럼 느낀 적이 있었습니까?",
+      "평소에는 우습지 않던 일로 웃거나, 다른 사람은 경박하다고 생각하는 일에 웃거나 농담한 적이 있었습니까?",
+    ],
+    criterion: "기분에만 평가를 국한합니다. 환자는 에너지 증가나 짜증을 고조된 기분으로 잘못 이해할 수 있습니다.",
+  },
+  {
+    code: "Y2",
+    name: "운동 활동-에너지 증가",
+    englishName: "Increased Motor Activity",
+    anchors: [
+      { score: 0, label: "없다." },
+      { score: 1, label: "주관적으로 증가되어 있다." },
+      { score: 2, label: "활기차고 면담 중 몸짓이 증가되어 있다." },
+      { score: 3, label: "과다한 에너지와 활동성, 안절부절못함이 있으나 진정될 수 있다." },
+      { score: 4, label: "운동성 흥분과 지속적인 과다활동이 있으며 진정될 수 없다." },
+    ],
+    questions: [
+      "지난 한 주 동안 에너지 수준은 어떠했습니까?",
+      "특별히 에너지가 넘친다고 느낀 적이 있었습니까? 진정하기 힘들었습니까?",
+      "신체적으로 안절부절못했습니까? 가만히 앉아 있지 못했습니까?",
+      "평소보다 더 활동적이었거나 일을 더 많이 했습니까?",
+    ],
+    criterion: "기준점들을 구분하는 동작이나 특징이 중요합니다.",
+  },
+  {
+    code: "Y3",
+    name: "성적 관심",
+    englishName: "Sexual Interest",
+    anchors: [
+      { score: 0, label: "정상이며 증가되어 있지 않다." },
+      { score: 1, label: "경도로 증가되었거나 증가되어 있을 가능성이 있다." },
+      { score: 2, label: "물어볼 때 명백하게 주관적으로 증가되어 있다." },
+      { score: 3, label: "자발적으로 성적인 내용을 자세히 말하거나 성욕 항진을 보고한다." },
+      { score: 4, label: "환자·치료진·평가자에게 공공연하게 성적인 행동을 한다." },
+    ],
+    questions: [
+      "평소보다 성적 관심이 많았습니까?",
+      "평소와는 다른 성적 행동을 하였습니까?",
+      "평소보다 성적인 이야기나 농담을 더 많이 하였습니까?",
+    ],
+    criterion: "실제 행동보다 환자가 성에 관해 무엇을 생각하고 얼마나 관심을 보이는지가 중요합니다.",
+  },
+  {
+    code: "Y4",
+    name: "수면",
+    englishName: "Sleep",
+    anchors: [
+      { score: 0, label: "수면시간의 감소가 없다고 보고한다." },
+      { score: 1, label: "정상 수면시간보다 1시간 미만 감소되어 있다." },
+      { score: 2, label: "정상 수면시간보다 1시간 이상 감소되어 있다." },
+      { score: 3, label: "수면에 대한 필요성이 감소했다고 보고한다." },
+      { score: 4, label: "수면의 필요성을 부인한다." },
+    ],
+    questions: [
+      "잠을 몇 시간 잡니까?",
+      "평소보다 덜 자고 싶었습니까?",
+      "덜 잤는데도 여전히 편안했습니까?",
+    ],
+    criterion: "수면 욕구 감소와 단순한 수면장애를 구분합니다. 잠들기 어렵다는 것만으로는 충분하지 않습니다.",
+  },
+  {
+    code: "Y5",
+    name: "자극과민성",
+    englishName: "Irritability",
+    anchors: [
+      { score: 0, label: "없다." },
+      { score: 2, label: "주관적으로 증가되어 있다." },
+      { score: 4, label: "면담 중 때때로 과민하거나 최근 화·짜증의 에피소드가 있었다." },
+      { score: 6, label: "면담 중 자주 과민하며 내내 무뚝뚝하고 퉁명스럽다." },
+      { score: 8, label: "적대적이거나 비협조적이며 면담이 불가능하다." },
+    ],
+    questions: [
+      "일어난 일이나 사람들이 당신을 대하는 태도 때문에 짜증이 났습니까?",
+      "이런 일 때문에 평소보다 더 괴로웠습니까?",
+      "종종 과민했습니까?",
+      "화난 것을 어떻게 표현했습니까?",
+    ],
+    criterion: "환자가 말하는 ‘과민함’의 의미를 명확히 하고, 같은 상황에서 정상적으로 예상되는 반응인지 함께 판단합니다.",
+  },
+  {
+    code: "Y6",
+    name: "말(속도와 양)",
+    englishName: "Speech-rate and Amount",
+    anchors: [
+      { score: 0, label: "증가하지 않았다." },
+      { score: 2, label: "말이 많은 듯한 느낌이 든다." },
+      { score: 4, label: "때때로 속도와 양이 증가하거나 장황하다." },
+      { score: 6, label: "밀어내듯 말하며 속도와 양이 지속적으로 증가하고 중단시키기 힘들다." },
+      { score: 8, label: "쏟아내듯 말해 중단시킬 수 없거나 계속 말을 한다." },
+    ],
+    questions: [
+      "평소보다 말이 더 많았습니까?",
+      "누군가에게 말할 틈을 주지 않는다는 지적을 받았습니까?",
+      "한 번 말을 시작하면 멈추기 어려웠습니까?",
+      "말을 너무 빨리 해서 사람들이 이해하지 못한 적이 있었습니까?",
+    ],
+    criterion: "환자 보고와 면담 관찰이 다르면 더 높은 점수를 원칙으로 하며, 지난 한 주의 면담 외 상황도 반영합니다.",
+  },
+  {
+    code: "Y7",
+    name: "언어-사고 장애",
+    englishName: "Language-thought Disorder",
+    anchors: [
+      { score: 0, label: "없다." },
+      { score: 1, label: "우원적이고 경도로 산만하며 사고가 빠르다." },
+      { score: 2, label: "산만하고 사고 목표를 잃으며 주제가 자주 바뀌고 사고가 질주한다." },
+      { score: 3, label: "사고의 비약·이탈로 따라잡기 힘들며 운율적 언어 또는 반향 언어가 있다." },
+      { score: 4, label: "지리멸렬하여 의사소통이 불가능하다." },
+    ],
+    questions: [
+      "평소보다 아이디어가 더 많거나 기발한 생각이 떠오르곤 했습니까?",
+      "지난 한 주 동안 유달리 생각이 예리하거나 명쾌하였습니까?",
+      "종종 산만해졌거나 머리가 매우 빨리 돌아가는 것 같았습니까?",
+      "생각이 너무 많아 말의 흐름을 놓치거나 세부적인 데 치우쳐 헤맨 적이 있었습니까?",
+    ],
+    criterion: "지난 한 주 동안 생각이 얼마나 명료했는지를 묻는 경계심이 적은 질문으로 시작합니다.",
+  },
+  {
+    code: "Y8",
+    name: "내용",
+    englishName: "Content",
+    anchors: [
+      { score: 0, label: "정상." },
+      { score: 2, label: "실현 가능성이 의심스러운 계획이나 새로운 관심이 있다." },
+      { score: 4, label: "특별하고 구체적인 계획 또는 지나친 종교성이 있다." },
+      { score: 6, label: "과대사고, 편집성 사고 또는 관계사고가 있다." },
+      { score: 8, label: "망상 또는 환각이 있다." },
+    ],
+    questions: [
+      "새로운 계획을 세우거나 시작했습니까? 특별한 일을 해냈거나 평소보다 더 유능했습니까?",
+      "평소보다 사물을 더 깊이 이해하거나 종교적인 통찰력을 얻었다고 느꼈습니까?",
+      "우연의 일치나 주변 일에서 특별한 의미를 더 많이 발견했습니까?",
+      "다른 사람들이 당신에 대해 말하거나 해치려 한다고 느꼈습니까?",
+      "다른 사람들이 보거나 듣지 못하는 것을 보거나 들은 적이 있었습니까?",
+    ],
+    criterion: "계획이 환자에게 갖는 가치와 중요성, 현실 타당성을 검토합니다. 한 번이라도 분명한 망상·환각이 있었다면 8점입니다.",
+  },
+  {
+    code: "Y9",
+    name: "파탄적-공격적 행동",
+    englishName: "Disruptive-Aggressive Behavior",
+    anchors: [
+      { score: 0, label: "없고 협조적이다." },
+      { score: 2, label: "빈정대거나 때때로 언성을 높이고 방어적이다." },
+      { score: 4, label: "요구가 많고 병동에서 위협적인 행동을 한다." },
+      { score: 6, label: "면담자를 위협하거나 고함을 질러 면담이 어렵다." },
+      { score: 8, label: "폭력적·파괴적이며 면담이 불가능하다." },
+    ],
+    questions: [
+      "다른 사람들과 어떻게 지냈으며 협조적이었습니까?",
+      "언성을 높이거나 요구가 많거나 빈정거린 적이 있었습니까?",
+      "다른 사람들과 맞부딪힌 적이 있었습니까? 어떤 일이 있었습니까?",
+      "고함, 물건 던지기, 위협 또는 파괴적인 행동을 한 적이 있었습니까?",
+    ],
+    criterion: "면담 태도와 방문 전 대인관계를 함께 봅니다. 한 번이라도 폭력을 행사했다면 8점, 면담자를 위협했다면 6점입니다.",
+  },
+  {
+    code: "Y10",
+    name: "용모",
+    englishName: "Appearance",
+    anchors: [
+      { score: 0, label: "복장과 차림새가 적절하다." },
+      { score: 1, label: "약간 흐트러진 듯하다." },
+      { score: 2, label: "단정하지 못하고 중등도로 헝클어졌거나 지나치게 옷치장을 한다." },
+      { score: 3, label: "옷차림이 헝클어졌거나 부분적으로만 입고, 지나치게 화려하게 화장한다." },
+      { score: 4, label: "완전히 흐트러졌거나 장식이 요란하고 옷차림이 괴상하다." },
+    ],
+    questions: [
+      "용모와 옷차림새를 단정히 했습니까? 그렇게 하기 힘들었습니까?",
+      "남이 보기에 지나치게 옷을 차려입었거나 제대로 갖춰 입지 못한 적이 있었습니까?",
+      "지난 한 주 동안 평소와 다른 색깔의 옷을 선택했습니까?",
+      "평소보다 보석 장식이나 화장을 더 많이 했거나 차림새에 전혀 신경 쓰지 않은 적이 있었습니까?",
+    ],
+    criterion: "최소한의 수정이 필요한 ‘약간 흐트러짐’과 단정하지 못한 상태를 구분합니다. 지나친 보석·화장은 3점 기준입니다.",
+  },
+  {
+    code: "Y11",
+    name: "병식",
+    englishName: "Insight",
+    anchors: [
+      { score: 0, label: "병을 인정하고 치료 필요성에 동의한다." },
+      { score: 1, label: "병일 수도 있다고 인정한다." },
+      { score: 2, label: "행동 변화를 인정하지만 병은 부인한다." },
+      { score: 3, label: "행동 변화 가능성은 인정하지만 병은 부인한다." },
+      { score: 4, label: "행동 변화를 전적으로 부인한다." },
+    ],
+    questions: [
+      "지난 한 주를 돌이켜볼 때 자신에게 이례적인 행동이라고 기억될 만한 일을 했습니까?",
+      "그 행동은 기분이 들떠서 그랬다고 생각합니까?",
+      "관찰되거나 보고된 행동에 대해 본인은 어떻게 생각합니까?",
+    ],
+    criterion: "기분장애에 따른 행동 변화를 인정하면 많아야 1점입니다. 문제를 다른 요인 탓으로 돌리면 2점, 완전히 부인하면 4점입니다.",
+  },
+];
 
 const PANSS_ITEMS: PanssItem[] = [
   { code: "P1", name: "망상", group: "P", definition: "현실적 근거가 없고 문화적 맥락으로 설명되지 않는 확고한 믿음.", example: "근거 없이 ‘누군가 음식에 독을 탄다’고 확신하며 식사를 거부함." },
@@ -422,7 +664,9 @@ const sections = [
   ["patient", "환자 정보"],
   ["history", "병력"],
   ["mse", "정신상태검사"],
+  ["phq9", "PHQ-9"],
   ["risk", "위험도"],
+  ["ymrs", "YMRS"],
   ["panss", "PANSS"],
   ["bprs", "BPRS"],
   ["summary", "평가 요약"],
@@ -437,8 +681,15 @@ export default function Home() {
   const [bprsScores, setBprsScores] = useState<Record<string, number>>(
     Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])),
   );
+  const [phqScores, setPhqScores] = useState<Record<string, number | undefined>>(
+    Object.fromEntries(PHQ_ITEMS.map((item) => [item.code, undefined])),
+  );
+  const [ymrsScores, setYmrsScores] = useState<Record<string, number>>(
+    Object.fromEntries(YMRS_ITEMS.map((item) => [item.code, 0])),
+  );
   const [mseSelections, setMseSelections] = useState<Record<string, string[]>>({});
   const [activeMseSection, setActiveMseSection] = useState(MSE_SECTIONS[0].key);
+  const [activeYmrsItem, setActiveYmrsItem] = useState(YMRS_ITEMS[0].code);
   const [activeGroup, setActiveGroup] = useState<"P" | "N" | "G">("P");
   const [panssExpanded, setPanssExpanded] = useState(false);
   const [bprsExpanded, setBprsExpanded] = useState(false);
@@ -474,6 +725,26 @@ export default function Home() {
     () => BPRS_ITEMS.reduce((total, item) => total + bprsScores[item.code], 0),
     [bprsScores],
   );
+
+  const phqTotal = useMemo(
+    () => PHQ_ITEMS.reduce((total, item) => total + (phqScores[item.code] ?? 0), 0),
+    [phqScores],
+  );
+  const phqAnswered = PHQ_ITEMS.filter((item) => phqScores[item.code] !== undefined).length;
+  const phqInterpretation =
+    phqTotal <= 4 ? "최경도" :
+    phqTotal <= 9 ? "경도" :
+    phqTotal <= 14 ? "중등도" :
+    phqTotal <= 19 ? "중고도" : "고도";
+  const ymrsTotal = useMemo(
+    () => YMRS_ITEMS.reduce((total, item) => total + ymrsScores[item.code], 0),
+    [ymrsScores],
+  );
+  const ymrsInterpretation =
+    ymrsTotal < 13 ? "기준 미만" :
+    ymrsTotal <= 19 ? "최소 증상" :
+    ymrsTotal <= 25 ? "경도 조증" :
+    ymrsTotal <= 37 ? "중등도 조증" : "중증 조증";
 
   const cssrsIdeationAnswered = CSSRS_IDEATION_ITEMS.some((item) => Boolean(form[item.key]));
   const highestCssrsIdeation = CSSRS_IDEATION_ITEMS.reduce(
@@ -539,6 +810,7 @@ export default function Home() {
       value("familyHistory") ? `[가족력]\n${value("familyHistory")}` : "",
       value("substanceHistory") ? `[물질사용력]\n${value("substanceHistory")}` : "",
       makeSection("Mental Status Examination", mseLines),
+      `[PHQ-9]\n총점 ${phqTotal}/27 (${phqInterpretation}, ${phqAnswered}/9문항 응답)`,
       makeSection("위험도 평가", [
         cssrsIdeationResponses ? `- C-SSRS 자살사고: ${cssrsIdeationResponses}` : undefined,
         cssrsIdeationAnswered ? `- 자살사고 최고 심각도: ${highestCssrsIdeation}/5` : undefined,
@@ -556,6 +828,7 @@ export default function Home() {
         value("riskLevel") ? `- 종합 위험도: ${value("riskLevel")}` : undefined,
         value("safetyPlan") ? `- 즉시 시행한 안전조치: ${value("safetyPlan")}` : undefined,
       ]),
+      `[YMRS]\n총점 ${ymrsTotal}/60 (${ymrsInterpretation})`,
       `[PANSS]\n양성척도 합 ${totals.positive}/49, 음성척도 합 ${totals.negative}/49, 일반정신병리 합 ${totals.general}/112, 총점 ${totals.total}/210`,
       `[BPRS]\n총점 ${bprsTotal}/126`,
       makeSection("임상 평가 및 계획", [
@@ -572,7 +845,7 @@ export default function Home() {
     ].filter(Boolean).join("\n");
 
     return `${header}\n\n${sections.join("\n\n")}\n\n※ 본 기록은 임상 판단을 보조하기 위한 평가 요약이며, 최종 진단과 처분은 담당 의료진의 종합 판단에 따릅니다.`;
-  }, [bprsTotal, cssrsIdeationAnswered, form, highestCssrsIdeation, mseSelections, totals]);
+  }, [bprsTotal, cssrsIdeationAnswered, form, highestCssrsIdeation, mseSelections, phqAnswered, phqInterpretation, phqTotal, totals, ymrsInterpretation, ymrsTotal]);
 
   const copySummary = async () => {
     await navigator.clipboard.writeText(summaryText);
@@ -670,15 +943,18 @@ export default function Home() {
 
   const resetAssessment = () => {
     const confirmed = window.confirm(
-      "입력한 환자정보, 병력, MSE, C-SSRS 위험도, PANSS 및 BPRS 점수를 모두 초기화할까요?",
+      "입력한 환자정보, 병력, MSE, PHQ-9, C-SSRS 위험도, YMRS, PANSS 및 BPRS 점수를 모두 초기화할까요?",
     );
     if (!confirmed) return;
 
     setForm({});
     setMseSelections({});
+    setPhqScores(Object.fromEntries(PHQ_ITEMS.map((item) => [item.code, undefined])));
+    setYmrsScores(Object.fromEntries(YMRS_ITEMS.map((item) => [item.code, 0])));
     setScores(Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])));
     setBprsScores(Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])));
     setActiveMseSection(MSE_SECTIONS[0].key);
+    setActiveYmrsItem(YMRS_ITEMS[0].code);
     setActiveGroup("P");
     setPanssExpanded(false);
     setBprsExpanded(false);
@@ -693,6 +969,8 @@ export default function Home() {
 
   const activeMse = MSE_SECTIONS.find((section) => section.key === activeMseSection)
     || MSE_SECTIONS[0];
+  const activeYmrs = YMRS_ITEMS.find((item) => item.code === activeYmrsItem)
+    || YMRS_ITEMS[0];
 
   return (
     <main>
@@ -765,7 +1043,7 @@ export default function Home() {
               <div className="eyebrow">EMERGENCY PSYCHIATRY</div>
               <h2>ER PSY Note</h2>
             </div>
-            <p>필수 임상정보와 정신상태검사, PANSS·BPRS를 구조화해 기록한 뒤 진료기록용 텍스트로 복사할 수 있습니다.</p>
+            <p>필수 임상정보와 정신상태검사, PHQ-9·YMRS·PANSS·BPRS를 구조화해 기록한 뒤 진료기록용 텍스트로 복사할 수 있습니다.</p>
           </section>
 
           <Section id="patient" number="01" title="환자 정보" description="환자 식별 정보와 평가 시점을 기록합니다.">
@@ -867,7 +1145,65 @@ export default function Home() {
             </article>
           </Section>
 
-          <Section id="risk" number="04" title="응급 위험도 평가" description="현재의 자·타해 위험과 즉시 필요한 안전조치를 확인합니다." urgent>
+          <Section id="phq9" number="04" title="PHQ-9 · 우울척도" description="지난 2주 동안 각 증상이 얼마나 자주 있었는지 한 항목씩 선택합니다.">
+            <div className="scale-overview phq-overview">
+              <div className="scale-total">
+                <span>PHQ-9 총점</span>
+                <strong>{phqTotal}</strong>
+                <small>/ 27</small>
+              </div>
+              <div className="scale-result">
+                <span>현재 해석</span>
+                <strong>{phqInterpretation}</strong>
+                <small>{phqAnswered}/9문항 응답 · 점수가 높을수록 우울 증상이 심함</small>
+              </div>
+              <div className="scale-cutoffs">
+                <b>절단점 참고</b>
+                <span>원척도 10점 · 주요우울증 선별</span>
+                <span>한국어판 9점</span>
+              </div>
+            </div>
+            <div className="severity-legend" aria-label="PHQ-9 결과 해석 기준">
+              <b>결과 해석</b>
+              <span className={phqTotal <= 4 ? "active" : ""}>0–4 최경도</span>
+              <span className={phqTotal >= 5 && phqTotal <= 9 ? "active" : ""}>5–9 경도</span>
+              <span className={phqTotal >= 10 && phqTotal <= 14 ? "active" : ""}>10–14 중등도</span>
+              <span className={phqTotal >= 15 && phqTotal <= 19 ? "active" : ""}>15–19 중고도</span>
+              <span className={phqTotal >= 20 ? "active" : ""}>20–27 고도</span>
+            </div>
+            <div className="phq-list">
+              {PHQ_ITEMS.map((item, index) => (
+                <div className={`phq-row ${item.code === "PHQ9" ? "safety-item" : ""}`} key={item.code}>
+                  <span className="scale-item-number">{index + 1}</span>
+                  <div className="phq-question">
+                    <b>{item.question}</b>
+                    {item.code === "PHQ9" && <small>양성 응답 시 응급 위험도 평가에서 자살사고와 안전계획을 이어서 확인하세요.</small>}
+                  </div>
+                  <div className="phq-options" role="radiogroup" aria-label={`${index + 1}번 문항`}>
+                    {PHQ_OPTIONS.map((option) => {
+                      const selected = phqScores[item.code] === option.score;
+                      return (
+                        <button
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          className={selected ? "selected" : ""}
+                          key={option.score}
+                          onClick={() => setPhqScores((current) => ({ ...current, [item.code]: option.score }))}
+                        >
+                          <span className="checkbox-mark">{selected ? "✓" : ""}</span>
+                          <span><b>{option.score}</b><small>{option.label}</small></span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="scale-note">PHQ-9은 선별 및 증상 심각도 참고 도구입니다. 절단점만으로 진단하지 말고 면담과 임상 판단을 함께 적용하세요.</p>
+          </Section>
+
+          <Section id="risk" number="05" title="응급 위험도 평가" description="현재의 자·타해 위험과 즉시 필요한 안전조치를 확인합니다." urgent>
             <div className="risk-alert"><span>!</span><p><b>위험이 임박한 경우</b> 평가 입력을 중단하고 기관의 응급 안전 프로토콜을 즉시 시행하세요.</p></div>
             <div className="cssrs-panel">
               <div className="cssrs-heading">
@@ -1022,7 +1358,95 @@ export default function Home() {
             </div>
           </Section>
 
-          <Section id="panss" number="05" title="PANSS" description="지난 1주간의 증상을 면담과 관찰, 정보제공자 자료를 종합하여 1–7점으로 평가합니다.">
+          <Section id="ymrs" number="06" title="YMRS · 조증평가척도" description="지난 한 주의 환자 보고, 직접 관찰 및 외부 정보를 종합하여 11개 항목을 평가합니다.">
+            <div className="scale-overview ymrs-overview">
+              <div className="scale-total">
+                <span>YMRS 총점</span>
+                <strong>{ymrsTotal}</strong>
+                <small>/ 60</small>
+              </div>
+              <div className="scale-result">
+                <span>현재 해석</span>
+                <strong>{ymrsInterpretation}</strong>
+                <small>4개 항목은 0·2·4·6·8점으로 가중 평가</small>
+              </div>
+              <div className="scale-cutoffs">
+                <b>평가 원칙</b>
+                <span>정보가 불일치하면 더 심한 쪽으로 평가</span>
+                <span>점수 사이에서 확신이 없으면 높은 점수 선택</span>
+              </div>
+            </div>
+            <div className="severity-legend ymrs-legend" aria-label="YMRS 결과 해석 기준">
+              <b>결과 해석</b>
+              <span className={ymrsTotal < 13 ? "active" : ""}>0–12 기준 미만</span>
+              <span className={ymrsTotal >= 13 && ymrsTotal <= 19 ? "active" : ""}>13–19 최소 증상</span>
+              <span className={ymrsTotal >= 20 && ymrsTotal <= 25 ? "active" : ""}>20–25 경도 조증</span>
+              <span className={ymrsTotal >= 26 && ymrsTotal <= 37 ? "active" : ""}>26–37 중등도 조증</span>
+              <span className={ymrsTotal >= 38 ? "active" : ""}>38–60 중증 조증</span>
+            </div>
+            <div className="ymrs-tabs" role="tablist" aria-label="YMRS 세부 항목">
+              {YMRS_ITEMS.map((item, index) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={activeYmrsItem === item.code}
+                  aria-controls={`ymrs-panel-${item.code}`}
+                  className={activeYmrsItem === item.code ? "active" : ""}
+                  key={item.code}
+                  onClick={() => setActiveYmrsItem(item.code)}
+                >
+                  <span>{index + 1}</span>
+                  <b>{item.name}</b>
+                  <small>{ymrsScores[item.code]}점</small>
+                </button>
+              ))}
+            </div>
+            <article className="ymrs-panel" id={`ymrs-panel-${activeYmrs.code}`} role="tabpanel">
+              <div className="ymrs-panel-heading">
+                <div>
+                  <span>{activeYmrs.code}</span>
+                  <div><h3>{activeYmrs.name}</h3><small>{activeYmrs.englishName}</small></div>
+                </div>
+                <strong>{ymrsScores[activeYmrs.code]}점</strong>
+              </div>
+              <div className="ymrs-reference-grid">
+                <section className="ymrs-questions">
+                  <h4>표준질문</h4>
+                  <ul>
+                    {activeYmrs.questions.map((question) => <li key={question}>{question}</li>)}
+                  </ul>
+                </section>
+                <aside className="ymrs-criterion">
+                  <h4>평가기준</h4>
+                  <p>{activeYmrs.criterion}</p>
+                </aside>
+              </div>
+              <div className="ymrs-anchor-heading">
+                <h4>점수 선택</h4>
+                <span>해당 항목의 지난 한 주 중 가장 심한 상태를 기준으로 선택</span>
+              </div>
+              <div className="ymrs-anchors">
+                {activeYmrs.anchors.map((anchor) => {
+                  const selected = ymrsScores[activeYmrs.code] === anchor.score;
+                  return (
+                    <button
+                      type="button"
+                      className={selected ? "selected" : ""}
+                      aria-pressed={selected}
+                      key={anchor.score}
+                      onClick={() => setYmrsScores((current) => ({ ...current, [activeYmrs.code]: anchor.score }))}
+                    >
+                      <strong>{anchor.score}</strong>
+                      <span>{anchor.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </article>
+            <p className="scale-note">YMRS는 교육받은 임상가가 환자 면담과 행동 관찰, 가족·치료진의 보고를 종합해 시행합니다. 결과 구간은 참고용이며 진단을 대신하지 않습니다.</p>
+          </Section>
+
+          <Section id="panss" number="07" title="PANSS" description="지난 1주간의 증상을 면담과 관찰, 정보제공자 자료를 종합하여 1–7점으로 평가합니다.">
             <ScaleToggle
               expanded={panssExpanded}
               onToggle={() => setPanssExpanded((current) => !current)}
@@ -1068,7 +1492,7 @@ export default function Home() {
             )}
           </Section>
 
-          <Section id="bprs" number="06" title="BPRS" description="간편 정신과적 평가 척도의 18개 증상을 언어적 보고와 행동 관찰을 바탕으로 1–7점 평가합니다.">
+          <Section id="bprs" number="08" title="BPRS" description="간편 정신과적 평가 척도의 18개 증상을 언어적 보고와 행동 관찰을 바탕으로 1–7점 평가합니다.">
             <ScaleToggle
               expanded={bprsExpanded}
               onToggle={() => setBprsExpanded((current) => !current)}
@@ -1117,7 +1541,7 @@ export default function Home() {
             )}
           </Section>
 
-          <Section id="summary" number="07" title="임상 평가 및 요약" description="진단적 인상과 계획을 입력한 뒤 전체 기록을 복사합니다.">
+          <Section id="summary" number="09" title="임상 평가 및 요약" description="진단적 인상과 계획을 입력한 뒤 전체 기록을 복사합니다.">
             <div className="stack">
               <Field label="진단적 인상"><textarea rows={3} value={form.impression || ""} onChange={(e) => setField("impression", e.target.value)} placeholder="주요 진단 및 감별진단, 근거" /></Field>
               <Field label="의학적 감별 / 검사"><textarea rows={3} value={form.medicalWorkup || ""} onChange={(e) => setField("medicalWorkup", e.target.value)} placeholder="섬망·물질·신경학적/내과적 원인 평가, 검사 결과" /></Field>
