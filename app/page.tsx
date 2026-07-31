@@ -572,7 +572,7 @@ export default function Home() {
     window.setTimeout(() => setCopied(false), 2200);
   };
 
-  const exportSummary = () => {
+  const exportSummary = async () => {
     const todayParts = new Intl.DateTimeFormat("ko-KR", {
       timeZone: "Asia/Seoul",
       year: "numeric",
@@ -596,6 +596,44 @@ export default function Home() {
     const file = new Blob(["\uFEFF", summaryText], {
       type: "text/plain;charset=utf-8",
     });
+
+    const saveFilePicker = (
+      window as Window & {
+        showSaveFilePicker?: (options: {
+          suggestedName: string;
+          types: Array<{
+            description: string;
+            accept: Record<string, string[]>;
+          }>;
+        }) => Promise<{
+          createWritable: () => Promise<{
+            write: (data: Blob) => Promise<void>;
+            close: () => Promise<void>;
+          }>;
+        }>;
+      }
+    ).showSaveFilePicker;
+
+    if (saveFilePicker) {
+      try {
+        const fileHandle = await saveFilePicker({
+          suggestedName: filename,
+          types: [
+            {
+              description: "텍스트 문서",
+              accept: { "text/plain": [".txt"] },
+            },
+          ],
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(file);
+        await writable.close();
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+
     const downloadUrl = URL.createObjectURL(file);
     const link = document.createElement("a");
     link.href = downloadUrl;
@@ -1029,7 +1067,7 @@ export default function Home() {
                 <div><span>TEXT PREVIEW</span><h3>평가 기록 미리보기</h3></div>
                 <div className="summary-actions">
                   <button type="button" onClick={copySummary}>{copied ? "복사 완료 ✓" : "전체 평가 복사"}</button>
-                  <button type="button" className="export-button" onClick={exportSummary}>TXT 내보내기</button>
+                  <button type="button" className="export-button" onClick={exportSummary}>TXT 저장 위치 선택</button>
                 </div>
               </div>
               <pre>{summaryText}</pre>
@@ -1044,7 +1082,7 @@ export default function Home() {
       <footer>
         <b>JNUH PSY</b>
         <span>의료진용 임상 기록 보조 도구 · 환자 안전과 기관 지침을 우선하세요.</span>
-        <span className="developer-credit">Developed by JB, Last updated 2026-07-30</span>
+        <span className="developer-credit">Developed by JB, Last updated 2026-07-31</span>
       </footer>
     </main>
   );
