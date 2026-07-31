@@ -616,3 +616,109 @@ footer span { color: #d6e7f8; }
   .section-heading { padding-left: 18px; padding-right: 18px; }
   .section-body { padding-left: 18px; padding-right: 18px; }
 }
+
+@media (min-width: 1181px) {
+  .topbar {
+    height: 70px;
+    padding: 0 max(20px, calc((100vw - 1400px) / 2 + 20px));
+  }
+  .brand { gap: 12px; }
+  .brand-emblem { width: 46px; height: 46px; flex-basis: 46px; border-width: 2px; }
+  .brand strong { font-size: 18px; }
+  .mobile-section-nav { display: none; }
+
+  .support-banner-inner {
+    max-width: 1440px;
+    min-height: 94px;
+    padding: 12px 20px;
+    grid-template-columns: 184px minmax(0, 1fr);
+    gap: 14px;
+  }
+  .support-banner-title { padding: 13px 18px; border-radius: 12px; }
+  .support-banner-title span { font-size: 15px; }
+  .support-banner-title strong { font-size: 21px; }
+  .support-call { padding: 11px 18px; }
+  .support-call span { font-size: 13px; }
+  .support-call strong { font-size: 25px; }
+  .support-call small { margin-top: 2px; }
+
+  .page-shell {
+    max-width: 1440px;
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 40px;
+    padding: 24px 20px 80px;
+  }
+  .side-nav {
+    display: flex;
+    position: sticky;
+    top: 94px;
+    align-self: start;
+    height: auto;
+    padding: 18px 12px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #164f9d 0%, #195ba8 100%);
+    box-shadow: 0 10px 24px rgba(17, 65, 128, .16);
+    color: white;
+  }
+  .side-nav-title {
+    padding: 0 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.2);
+    font-size: 13px;
+    letter-spacing: .04em;
+  }
+  .side-nav nav { border-top: 0; }
+  .side-nav nav button {
+    height: 47px;
+    padding: 0 10px;
+    border-bottom-color: rgba(255,255,255,.18);
+    color: white;
+    font-size: 14px;
+    font-weight: 750;
+  }
+  .side-nav nav button:hover,
+  .side-nav nav button:focus-visible {
+    padding-left: 15px;
+    background: rgba(255,255,255,.11);
+    color: white;
+    outline: none;
+  }
+  .side-nav nav span {
+    color: #a9d8f2;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+  }
+
+  .hero {
+    min-height: 214px;
+    gap: 44px;
+    padding: 14px 0 36px;
+  }
+  .hero h2 { font-size: clamp(48px, 4.3vw, 64px); }
+  .hero > p { max-width: 430px; font-size: 15px; }
+  .form-section {
+    margin-bottom: 20px;
+    scroll-margin-top: 86px;
+    border-radius: 16px;
+  }
+  .section-heading {
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+    padding: 25px 30px 18px;
+  }
+  .section-heading h2 { font-size: 25px; }
+  .section-heading p { font-size: 13px; }
+  .section-body { padding: 24px 30px 32px; }
+  .field-grid { gap: 20px 16px; }
+  .stack { gap: 18px; }
+  input, select { height: 46px; }
+  .mse-card { padding: 18px; }
+  .mse-card-heading { padding-bottom: 13px; margin-bottom: 13px; }
+  .mse-options button { min-height: 58px; padding: 10px; }
+  .cssrs-heading { min-height: 108px; padding: 19px; }
+  .cssrs-subsection { padding: 21px 19px; }
+  .cssrs-item { min-height: 90px; padding: 12px; }
+  .cssrs-list.behavior .cssrs-item { min-height: 74px; }
+  .score-card { padding: 14px 18px; }
+  .panss-row { min-height: 82px; padding: 13px; }
+}

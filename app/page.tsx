@@ -589,7 +589,7 @@ export default function Home() {
     const name = form.name?.trim() || "이름미기재";
     const sex = form.sex === "남성" ? "M" : form.sex === "여성" ? "F" : "U";
     const age = form.age?.trim() || "NA";
-    const filename = `[${assessmentDate} ${patientId} ${name} ${sex}${age}]`
+    const filename = `${assessmentDate} ${patientId} ${name} ${sex}${age}`
       .replace(/[\\/:*?"<>|]/g, "-")
       .replace(/\s+/g, " ")
       .concat(".txt");
@@ -735,9 +735,7 @@ export default function Home() {
 
       <div className="page-shell">
         <aside className="side-nav" aria-label="평가 항목">
-          <div className="eyebrow">ASSESSMENT</div>
-          <h1>정신건강<br />응급 평가</h1>
-          <p>병력부터 증상 척도까지 한 흐름으로 기록합니다.</p>
+          <strong className="side-nav-title">평가 항목</strong>
           <nav>
             {sections.map(([id, label], index) => (
               <button key={id} onClick={() => jumpTo(id)}>
@@ -745,10 +743,6 @@ export default function Home() {
               </button>
             ))}
           </nav>
-          <div className="side-note">
-            <b>임상 보조 도구</b>
-            <span>위급한 자·타해 위험은 척도 입력보다 즉각적인 안전 확보를 우선합니다.</span>
-          </div>
         </aside>
 
         <div className="content">
