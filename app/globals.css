@@ -93,7 +93,13 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .stack { display: grid; gap: 24px; }
 .mse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 24px; }
 .mse-sections { display: grid; gap: 18px; }
+.mse-tabs { display: flex; gap: 0; overflow-x: auto; border: 1px solid var(--line); border-bottom: 0; background: #f5f9fc; scrollbar-width: thin; }
+.mse-tabs button { flex: 0 0 auto; min-height: 52px; padding: 0 17px; border: 0; border-right: 1px solid var(--line); border-bottom: 3px solid transparent; background: transparent; color: #66768a; white-space: nowrap; font-size: 13px; font-weight: 750; }
+.mse-tabs button:hover { background: #edf6fb; color: #1956a2; }
+.mse-tabs button.active { border-bottom-color: #168dcc; background: white; color: #1956a2; }
+.mse-tabs button span { margin-left: 7px; color: #68aa4f; font-size: 11px; }
 .mse-card { border: 1px solid var(--line); background: white; padding: 22px; }
+.mse-tab-panel { border-top: 0; }
 .mse-card-heading { display: grid; grid-template-columns: minmax(220px, .8fr) 1.2fr; gap: 24px; padding-bottom: 16px; border-bottom: 1px solid #e8eeeb; margin-bottom: 16px; }
 .mse-card-heading h3 { margin: 0; font: 600 18px/1.25 Georgia, "Noto Serif KR", serif; color: var(--green); }
 .mse-card-heading span { display: block; color: #8a9891; font-size: 12px; margin-top: 5px; letter-spacing: .04em; }
@@ -201,6 +207,15 @@ input:focus, textarea:focus, select:focus { border-color: #45806e; box-shadow: 0
 .score-buttons button:hover { border-color: var(--green); }
 .score-buttons button.selected { background: var(--green); border-color: var(--green); color: white; }
 .scale-note { color: #6d7d75; font-size: 12px; line-height: 1.65; margin: 14px 0 0; }
+.scale-toggle { width: 100%; min-height: 76px; padding: 15px 18px; border: 1px solid #c8dbe9; border-radius: 12px; background: linear-gradient(135deg, #eef8fd, #f7fbfe); color: var(--ink); display: flex; align-items: center; justify-content: space-between; gap: 20px; text-align: left; }
+.scale-toggle:hover { border-color: #168dcc; background: #e8f6fc; }
+.scale-toggle > span { display: grid; gap: 3px; }
+.scale-toggle b { color: #1956a2; font-size: 16px; }
+.scale-toggle small { color: #66768a; font-size: 12px; }
+.scale-toggle strong { display: flex; align-items: center; gap: 10px; color: #1956a2; font-size: 13px; white-space: nowrap; }
+.scale-toggle i { font-style: normal; font-size: 20px; line-height: 1; transition: transform .18s; }
+.scale-toggle.expanded i { transform: rotate(180deg); }
+.collapsible-scale-content { margin-top: 18px; }
 
 .summary-preview { border: 1px solid #becdc6; margin-top: 32px; background: #f5f8f6; }
 .summary-heading { display: flex; justify-content: space-between; align-items: center; padding: 20px 22px; border-bottom: 1px solid #ced9d4; }
@@ -602,6 +617,7 @@ footer span { color: #d6e7f8; }
   .section-body { padding: 24px 22px 32px; }
   .section-heading h2 { font-size: 26px; }
   .mse-card { padding: 18px; }
+  .mse-tabs button { min-height: 48px; padding: 0 14px; }
   .summary-heading { align-items: stretch; flex-direction: column; gap: 14px; }
   .summary-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; width: 100%; }
   .summary-heading button { width: 100%; min-width: 0; padding: 10px 8px; font-size: 12px; white-space: nowrap; }
@@ -615,6 +631,9 @@ footer span { color: #d6e7f8; }
   .hero h2 { font-size: 39px; }
   .section-heading { padding-left: 18px; padding-right: 18px; }
   .section-body { padding-left: 18px; padding-right: 18px; }
+  .mse-tabs button { min-height: 46px; padding: 0 12px; font-size: 12px; }
+  .scale-toggle { min-height: 70px; padding: 13px 14px; }
+  .scale-toggle strong { font-size: 12px; }
 }
 
 @media (min-width: 1181px) {
@@ -713,6 +732,7 @@ footer span { color: #d6e7f8; }
   .stack { gap: 18px; }
   input, select { height: 46px; }
   .mse-card { padding: 18px; }
+  .mse-tabs button { min-height: 48px; padding: 0 14px; }
   .mse-card-heading { padding-bottom: 13px; margin-bottom: 13px; }
   .mse-options button { min-height: 58px; padding: 10px; }
   .cssrs-heading { min-height: 108px; padding: 19px; }

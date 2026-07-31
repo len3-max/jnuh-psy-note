@@ -433,7 +433,10 @@ export default function Home() {
     Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])),
   );
   const [mseSelections, setMseSelections] = useState<Record<string, string[]>>({});
+  const [activeMseSection, setActiveMseSection] = useState(MSE_SECTIONS[0].key);
   const [activeGroup, setActiveGroup] = useState<"P" | "N" | "G">("P");
+  const [panssExpanded, setPanssExpanded] = useState(false);
+  const [bprsExpanded, setBprsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const setField = (key: string, value: string) =>
@@ -670,7 +673,10 @@ export default function Home() {
     setMseSelections({});
     setScores(Object.fromEntries(PANSS_ITEMS.map((item) => [item.code, 1])));
     setBprsScores(Object.fromEntries(BPRS_ITEMS.map((item) => [item.code, 1])));
+    setActiveMseSection(MSE_SECTIONS[0].key);
     setActiveGroup("P");
+    setPanssExpanded(false);
+    setBprsExpanded(false);
     setCopied(false);
     window.requestAnimationFrame(() =>
       window.scrollTo({ top: 0, behavior: "smooth" }),
@@ -679,6 +685,9 @@ export default function Home() {
 
   const jumpTo = (id: string) =>
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const activeMse = MSE_SECTIONS.find((section) => section.key === activeMseSection)
+    || MSE_SECTIONS[0];
 
   return (
     <main>
@@ -795,44 +804,62 @@ export default function Home() {
           </Section>
 
           <Section id="mse" number="03" title="Mental Status Examination" description="면담 중 관찰한 소견을 선택하고, 필요한 내용을 추가로 기술합니다.">
-            <div className="mse-sections">
+            <div className="mse-tabs" role="tablist" aria-label="정신상태검사 세부 항목">
               {MSE_SECTIONS.map((section) => (
-                <article className="mse-card" key={section.key}>
-                  <div className="mse-card-heading">
-                    <div>
-                      <h3>{section.title}</h3>
-                      {section.subtitle && <span>{section.subtitle}</span>}
-                    </div>
-                    <p>{section.definition}</p>
-                  </div>
-                  <div className="mse-options">
-                    {section.options.map((option) => {
-                      const selected = mseSelections[section.key]?.includes(option.label);
-                      return (
-                        <button
-                          type="button"
-                          key={option.label}
-                          className={selected ? "selected" : ""}
-                          onClick={() => toggleMse(section.key, option.label)}
-                          aria-pressed={selected}
-                        >
-                          <span className="check-mark">{selected ? "✓" : ""}</span>
-                          <span><b>{option.label}</b><small>{option.definition}</small></span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <Field label="Additional description">
-                    <textarea
-                      rows={2}
-                      value={form[`mse_${section.key}`] || ""}
-                      onChange={(e) => setField(`mse_${section.key}`, e.target.value)}
-                      placeholder="선택 항목을 보완할 관찰 내용 또는 환자 진술"
-                    />
-                  </Field>
-                </article>
+                <button
+                  type="button"
+                  role="tab"
+                  key={section.key}
+                  className={activeMseSection === section.key ? "active" : ""}
+                  aria-selected={activeMseSection === section.key}
+                  aria-controls={`mse-panel-${section.key}`}
+                  onClick={() => setActiveMseSection(section.key)}
+                >
+                  {section.title}
+                  {(mseSelections[section.key]?.length || form[`mse_${section.key}`]) && (
+                    <span aria-label="기록됨">✓</span>
+                  )}
+                </button>
               ))}
             </div>
+            <article
+              className="mse-card mse-tab-panel"
+              id={`mse-panel-${activeMse.key}`}
+              role="tabpanel"
+            >
+              <div className="mse-card-heading">
+                <div>
+                  <h3>{activeMse.title}</h3>
+                  {activeMse.subtitle && <span>{activeMse.subtitle}</span>}
+                </div>
+                <p>{activeMse.definition}</p>
+              </div>
+              <div className="mse-options">
+                {activeMse.options.map((option) => {
+                  const selected = mseSelections[activeMse.key]?.includes(option.label);
+                  return (
+                    <button
+                      type="button"
+                      key={option.label}
+                      className={selected ? "selected" : ""}
+                      onClick={() => toggleMse(activeMse.key, option.label)}
+                      aria-pressed={selected}
+                    >
+                      <span className="check-mark">{selected ? "✓" : ""}</span>
+                      <span><b>{option.label}</b><small>{option.definition}</small></span>
+                    </button>
+                  );
+                })}
+              </div>
+              <Field label="Additional description">
+                <textarea
+                  rows={2}
+                  value={form[`mse_${activeMse.key}`] || ""}
+                  onChange={(e) => setField(`mse_${activeMse.key}`, e.target.value)}
+                  placeholder="선택 항목을 보완할 관찰 내용 또는 환자 진술"
+                />
+              </Field>
+            </article>
           </Section>
 
           <Section id="risk" number="04" title="응급 위험도 평가" description="현재의 자·타해 위험과 즉시 필요한 안전조치를 확인합니다." urgent>
@@ -991,78 +1018,98 @@ export default function Home() {
           </Section>
 
           <Section id="panss" number="05" title="PANSS" description="지난 1주간의 증상을 면담과 관찰, 정보제공자 자료를 종합하여 1–7점으로 평가합니다.">
-            <div className="score-strip">
-              <Score label="양성척도" value={totals.positive} max={49} tone="red" />
-              <Score label="음성척도" value={totals.negative} max={49} tone="blue" />
-              <Score label="일반정신병리" value={totals.general} max={112} tone="gold" />
-              <Score label="PANSS 총점" value={totals.total} max={210} tone="dark" />
-            </div>
-            <div className="panss-scale"><b>채점 기준</b><span>1 없음</span><span>2 극히 경미</span><span>3 경미</span><span>4 중간</span><span>5 중고도</span><span>6 고도</span><span>7 최고도</span></div>
-            <div className="tabs" role="tablist">
-              {([["P", "양성척도 · 7"], ["N", "음성척도 · 7"], ["G", "일반정신병리 · 16"]] as const).map(([group, label]) => (
-                <button key={group} className={activeGroup === group ? "active" : ""} onClick={() => setActiveGroup(group)}>{label}</button>
-              ))}
-            </div>
-            <div className="panss-list">
-              {PANSS_ITEMS.filter((item) => item.group === activeGroup).map((item) => (
-                <div className="panss-row" key={item.code}>
-                  <span className={`code code-${item.group.toLowerCase()}`}>{item.code}</span>
-                  <div className="panss-info">
-                    <b>{item.name}</b>
-                    <p>{item.definition}</p>
-                    <details>
-                      <summary>임상 예시 보기</summary>
-                      <span>{item.example}</span>
-                    </details>
-                  </div>
-                  <div className="score-buttons" aria-label={`${item.code} ${item.name} 점수`}>
-                    {[1, 2, 3, 4, 5, 6, 7].map((score) => (
-                      <button key={score} className={scores[item.code] === score ? "selected" : ""} onClick={() => setScores((current) => ({ ...current, [item.code]: score }))}>{score}</button>
-                    ))}
-                  </div>
+            <ScaleToggle
+              expanded={panssExpanded}
+              onToggle={() => setPanssExpanded((current) => !current)}
+              label="PANSS 평가"
+              summary={`현재 총점 ${totals.total}점`}
+            />
+            {panssExpanded && (
+              <div className="collapsible-scale-content">
+                <div className="score-strip">
+                  <Score label="양성척도" value={totals.positive} max={49} tone="red" />
+                  <Score label="음성척도" value={totals.negative} max={49} tone="blue" />
+                  <Score label="일반정신병리" value={totals.general} max={112} tone="gold" />
+                  <Score label="PANSS 총점" value={totals.total} max={210} tone="dark" />
                 </div>
-              ))}
-            </div>
-            <p className="scale-note">PANSS는 교육받은 평가자가 공식 매뉴얼의 기준점(anchor point)에 따라 시행해야 합니다. 점수만으로 진단이나 처분을 결정하지 마세요.</p>
+                <div className="panss-scale"><b>채점 기준</b><span>1 없음</span><span>2 극히 경미</span><span>3 경미</span><span>4 중간</span><span>5 중고도</span><span>6 고도</span><span>7 최고도</span></div>
+                <div className="tabs" role="tablist">
+                  {([["P", "양성척도 · 7"], ["N", "음성척도 · 7"], ["G", "일반정신병리 · 16"]] as const).map(([group, label]) => (
+                    <button type="button" key={group} className={activeGroup === group ? "active" : ""} onClick={() => setActiveGroup(group)}>{label}</button>
+                  ))}
+                </div>
+                <div className="panss-list">
+                  {PANSS_ITEMS.filter((item) => item.group === activeGroup).map((item) => (
+                    <div className="panss-row" key={item.code}>
+                      <span className={`code code-${item.group.toLowerCase()}`}>{item.code}</span>
+                      <div className="panss-info">
+                        <b>{item.name}</b>
+                        <p>{item.definition}</p>
+                        <details>
+                          <summary>임상 예시 보기</summary>
+                          <span>{item.example}</span>
+                        </details>
+                      </div>
+                      <div className="score-buttons" aria-label={`${item.code} ${item.name} 점수`}>
+                        {[1, 2, 3, 4, 5, 6, 7].map((score) => (
+                          <button type="button" key={score} className={scores[item.code] === score ? "selected" : ""} onClick={() => setScores((current) => ({ ...current, [item.code]: score }))}>{score}</button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="scale-note">PANSS는 교육받은 평가자가 공식 매뉴얼의 기준점(anchor point)에 따라 시행해야 합니다. 점수만으로 진단이나 처분을 결정하지 마세요.</p>
+              </div>
+            )}
           </Section>
 
           <Section id="bprs" number="06" title="BPRS" description="간편 정신과적 평가 척도의 18개 증상을 언어적 보고와 행동 관찰을 바탕으로 1–7점 평가합니다.">
-            <div className="score-strip bprs-score-strip">
-              <Score label="BPRS 총점" value={bprsTotal} max={126} tone="dark" />
-            </div>
-            <div className="panss-scale">
-              <b>채점 기준</b>
-              <span>1 없음</span><span>2 매우 경함</span><span>3 경함</span>
-              <span>4 중등도</span><span>5 약간 심함</span><span>6 심함</span><span>7 매우 심함</span>
-            </div>
-            <div className="panss-list bprs-list">
-              {BPRS_ITEMS.map((item) => (
-                <div className="panss-row" key={item.code}>
-                  <span className="code code-b">{item.code}</span>
-                  <div className="panss-info">
-                    <div className="item-title-line">
-                      <b>{item.name}</b>
-                      <small>{item.source}</small>
-                    </div>
-                    <p>{item.definition}</p>
-                  </div>
-                  <div className="score-buttons" aria-label={`${item.code} ${item.name} 점수`}>
-                    {[1, 2, 3, 4, 5, 6, 7].map((score) => (
-                      <button
-                        type="button"
-                        key={score}
-                        className={bprsScores[item.code] === score ? "selected" : ""}
-                        aria-pressed={bprsScores[item.code] === score}
-                        onClick={() => setBprsScores((current) => ({ ...current, [item.code]: score }))}
-                      >
-                        {score}
-                      </button>
-                    ))}
-                  </div>
+            <ScaleToggle
+              expanded={bprsExpanded}
+              onToggle={() => setBprsExpanded((current) => !current)}
+              label="BPRS 평가"
+              summary={`현재 총점 ${bprsTotal}점`}
+            />
+            {bprsExpanded && (
+              <div className="collapsible-scale-content">
+                <div className="score-strip bprs-score-strip">
+                  <Score label="BPRS 총점" value={bprsTotal} max={126} tone="dark" />
                 </div>
-              ))}
-            </div>
-            <p className="scale-note">BPRS는 면담에서 확인한 환자의 보고와 평가자가 관찰한 행동을 구분해 채점합니다. 척도 점수만으로 진단이나 처분을 결정하지 마세요.</p>
+                <div className="panss-scale">
+                  <b>채점 기준</b>
+                  <span>1 없음</span><span>2 매우 경함</span><span>3 경함</span>
+                  <span>4 중등도</span><span>5 약간 심함</span><span>6 심함</span><span>7 매우 심함</span>
+                </div>
+                <div className="panss-list bprs-list">
+                  {BPRS_ITEMS.map((item) => (
+                    <div className="panss-row" key={item.code}>
+                      <span className="code code-b">{item.code}</span>
+                      <div className="panss-info">
+                        <div className="item-title-line">
+                          <b>{item.name}</b>
+                          <small>{item.source}</small>
+                        </div>
+                        <p>{item.definition}</p>
+                      </div>
+                      <div className="score-buttons" aria-label={`${item.code} ${item.name} 점수`}>
+                        {[1, 2, 3, 4, 5, 6, 7].map((score) => (
+                          <button
+                            type="button"
+                            key={score}
+                            className={bprsScores[item.code] === score ? "selected" : ""}
+                            aria-pressed={bprsScores[item.code] === score}
+                            onClick={() => setBprsScores((current) => ({ ...current, [item.code]: score }))}
+                          >
+                            {score}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="scale-note">BPRS는 면담에서 확인한 환자의 보고와 평가자가 관찰한 행동을 구분해 채점합니다. 척도 점수만으로 진단이나 처분을 결정하지 마세요.</p>
+              </div>
+            )}
           </Section>
 
           <Section id="summary" number="07" title="임상 평가 및 요약" description="진단적 인상과 계획을 입력한 뒤 전체 기록을 복사합니다.">
@@ -1131,4 +1178,18 @@ function Field({ label, required, children }: { label: string; required?: boolea
 
 function Score({ label, value, max, tone }: { label: string; value: number; max: number; tone: string }) {
   return <div className={`score-card ${tone}`}><span>{label}</span><strong>{value}</strong><small>/ {max}</small></div>;
+}
+
+function ScaleToggle({ expanded, onToggle, label, summary }: { expanded: boolean; onToggle: () => void; label: string; summary: string }) {
+  return (
+    <button
+      type="button"
+      className={`scale-toggle ${expanded ? "expanded" : ""}`}
+      aria-expanded={expanded}
+      onClick={onToggle}
+    >
+      <span><b>{label}</b><small>{summary}</small></span>
+      <strong>{expanded ? "평가 접기" : "평가 펼치기"}<i aria-hidden="true">⌄</i></strong>
+    </button>
+  );
 }
