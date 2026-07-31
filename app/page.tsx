@@ -21,6 +21,7 @@ type MseOption = { label: string; definition: string };
 type MseSection = {
   key: string;
   title: string;
+  tabTitle?: string;
   subtitle?: string;
   definition: string;
   options: MseOption[];
@@ -117,6 +118,7 @@ const MSE_SECTIONS: MseSection[] = [
   {
     key: "psychomotor",
     title: "Psychomotor Behavior",
+    tabTitle: "Psychomotor",
     subtitle: "Overt behavior and psychomotor activity",
     definition: "겉으로 드러나는 행동의 양과 속도, 운동성 변화를 평가합니다.",
     options: [
@@ -131,6 +133,7 @@ const MSE_SECTIONS: MseSection[] = [
   {
     key: "attitude",
     title: "Attitude toward the Interviewer",
+    tabTitle: "Attitude",
     definition: "면담자와 평가 과정에 대한 협조성, 경계, 적대성을 봅니다.",
     options: [
       { label: "Cooperative", definition: "면담에 자발적이고 적절하게 협조함" },
@@ -191,6 +194,7 @@ const MSE_SECTIONS: MseSection[] = [
   {
     key: "thoughtForm",
     title: "Form & Continuity of Thought",
+    tabTitle: "Thought form",
     definition: "사고의 속도·생산성·논리적 연결과 목표지향성을 평가합니다.",
     options: [
       { label: "Coherent / Relevant", definition: "사고가 논리적이고 질문에 적절히 답함" },
@@ -206,6 +210,7 @@ const MSE_SECTIONS: MseSection[] = [
   {
     key: "thoughtContent",
     title: "Content of Thought",
+    tabTitle: "Thought content",
     definition: "사고가 집중되는 주제와 망상·관계사고·자살사고 등을 확인합니다.",
     options: [
       { label: "Preoccupation", definition: "특정 걱정이나 주제에 반복적으로 몰두함" },
@@ -815,7 +820,7 @@ export default function Home() {
                   aria-controls={`mse-panel-${section.key}`}
                   onClick={() => setActiveMseSection(section.key)}
                 >
-                  {section.title}
+                  {section.tabTitle || section.title}
                   {(mseSelections[section.key]?.length || form[`mse_${section.key}`]) && (
                     <span aria-label="기록됨">✓</span>
                   )}
