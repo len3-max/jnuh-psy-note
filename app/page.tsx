@@ -593,7 +593,7 @@ export default function Home() {
       .replace(/[\\/:*?"<>|]/g, "-")
       .replace(/\s+/g, " ")
       .concat(".txt");
-    const file = new Blob(["\uFEFF", summaryText], {
+    const file = new File(["\uFEFF", summaryText], filename, {
       type: "text/plain;charset=utf-8",
     });
 
@@ -628,6 +628,22 @@ export default function Home() {
         const writable = await fileHandle.createWritable();
         await writable.write(file);
         await writable.close();
+        return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
+      }
+    }
+
+    if (
+      typeof navigator.share === "function"
+      && typeof navigator.canShare === "function"
+      && navigator.canShare({ files: [file] })
+    ) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: filename,
+        });
         return;
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
